@@ -1,0 +1,9 @@
+* text=auto
+*.java text eol=lf
+pom.xml text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.py text eol=lf
+mvnw text eol=lf
+*.cmd text eol=crlf
+*.pdf binary

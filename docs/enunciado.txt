@@ -1,0 +1,129 @@
+DESAFIO #03 — Conciliação de pagamentos de fatura
+29/10/2026 · Java 17+ · Pair Programming · 30 minutos
+Exercício fictício inspirado no contexto de um banco digital; não é uma questão oficial do Nubank.
+
+1. O CENÁRIO (Contexto Nubank)
+
+O serviço de faturas registra pagamentos esperados, enquanto um parceiro envia os pagamentos efetivamente liquidados. Antes de atualizar as faturas, a equipe precisa identificar divergências entre as duas listas.
+
+Implemente um conciliador de um único lote. Cada referência identifica um pagamento, não a fatura inteira. Todos os valores são em reais, representados em centavos. Não implemente atualização de saldo nem integração externa.
+
+2. REQUISITOS DO PROBLEMA
+
+Requisitos funcionais:
+• Entrada: duas listas de Lancamento(referencia, valorCentavos): esperados e liquidados.
+• Produzir exatamente um Resultado por referência presente em qualquer uma das listas.
+• Classificar como CONCILIADO quando a referência existe nas duas listas com valores iguais.
+• Classificar como VALOR_DIVERGENTE quando existe nas duas listas com valores diferentes.
+• Classificar como NAO_LIQUIDADO quando existe somente nos esperados.
+• Classificar como NAO_PREVISTO quando existe somente nos liquidados.
+• Preservar na saída a ordem dos esperados; acrescentar depois as referências exclusivas dos liquidados, na ordem em que chegaram.
+• Listas vazias são válidas. Duas listas vazias produzem resultado vazio.
+• Rejeitar com IllegalArgumentException: lista ou elemento nulo, referência nula/em branco, valor zero/negativo ou referência repetida dentro de uma mesma lista, mesmo com valor igual.
+• A referência é comparada exatamente, com distinção de maiúsculas/minúsculas e sem trim automático. Uma referência presente uma vez em cada lista é válida.
+• Validar o lote inteiro: entrada inválida não deve gerar resultado parcial.
+
+Requisitos não funcionais:
+• Tempo médio O(n + m) e memória adicional O(n + m).
+• Não modificar as listas recebidas. Retornar uma lista não modificável.
+• Serviço sem estado compartilhado mutável; cada chamada é independente.
+• Sem banco, rede, concorrência interna ou framework. Valores em long; não usar double.
+
+3. ESPECIFICAÇÃO BDD
+
+Funcionalidade: Conciliar um lote de pagamentos
+
+Cenário: Mesmo pagamento, mesmo valor
+  Dado que o pagamento esperado "pag-1" vale 10000 centavos
+  E o parceiro liquidou "pag-1" com 10000 centavos
+  Quando concilio o lote
+  Então recebo "pag-1" com status CONCILIADO
+
+Cenário: Parceiro liquidou valor diferente
+  Dado que o pagamento esperado "pag-1" vale 10000 centavos
+  E o parceiro liquidou "pag-1" com 9000 centavos
+  Quando concilio o lote
+  Então recebo "pag-1" com status VALOR_DIVERGENTE
+
+Cenário: Referência duplicada no lote do parceiro
+  Dado que os liquidados contêm duas entradas com referência "pag-1"
+  Quando concilio o lote
+  Então ocorre IllegalArgumentException
+  E nenhum resultado parcial é retornado
+
+4. DIRETRIZES TÉCNICAS E ARQUITETURA
+
+• Crie records Lancamento(String referencia, long valorCentavos) e Resultado(String referencia, Status status).
+• Status é um enum com os quatro valores descritos.
+• Implemente um Domain Service puro: new Conciliador().conciliar(esperados, liquidados), retornando List<Resultado>.
+• Separe validação, classificação e organização do resultado em responsabilidades legíveis. Não force padrões adicionais.
+• Use estruturas de dados que sustentem a complexidade exigida. Streams são opcionais; legibilidade e ordem determinística importam mais.
+• Preserve o núcleo independente do transporte: ele deve funcionar tanto em um processo local quanto dentro de um consumidor de mensagens na cloud.
+• Ao entregar, explique em duas frases qual adaptador receberia o lote na cloud e por que essa integração ficaria fora do conciliador. Não implemente o adaptador.
+
+5. ARQUIVO DE TESTE INICIAL (TDD)
+
+Arquivo: ConciliadorTest.java. Dependência: JUnit Jupiter 5; Mockito não é necessário.
+O primeiro vermelho será de compilação por ausência dos tipos. Crie as assinaturas e, depois, implemente o comportamento para passar os testes. Não altere as expectativas.
+
+```java
+import org.junit.jupiter.api.Test;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ConciliadorTest {
+
+    private final Conciliador conciliador = new Conciliador();
+
+    @Test
+    void deveClassificarEManterAOrdemDoContrato() {
+        var esperados = List.of(
+            new Lancamento("pag-2", 2_000L),
+            new Lancamento("pag-1", 1_000L),
+            new Lancamento("pag-3", 3_000L)
+        );
+        var liquidados = List.of(
+            new Lancamento("pag-4", 4_000L),
+            new Lancamento("pag-1", 900L),
+            new Lancamento("pag-2", 2_000L)
+        );
+
+        var resultado = conciliador.conciliar(esperados, liquidados);
+
+        assertEquals(List.of(
+            new Resultado("pag-2", Status.CONCILIADO),
+            new Resultado("pag-1", Status.VALOR_DIVERGENTE),
+            new Resultado("pag-3", Status.NAO_LIQUIDADO),
+            new Resultado("pag-4", Status.NAO_PREVISTO)
+        ), resultado);
+    }
+
+    @Test
+    void deveRejeitarReferenciaDuplicadaMesmoComValorIgual() {
+        var liquidados = List.of(
+            new Lancamento("pag-1", 1_000L),
+            new Lancamento("pag-1", 1_000L)
+        );
+
+        assertThrows(IllegalArgumentException.class,
+            () -> conciliador.conciliar(List.of(), liquidados));
+    }
+
+    @Test
+    void deveRetornarListaNaoModificavel() {
+        var resultado = conciliador.conciliar(
+            List.of(new Lancamento("pag-1", 1_000L)),
+            List.of()
+        );
+
+        assertThrows(UnsupportedOperationException.class,
+            () -> resultado.add(
+                new Resultado("pag-2", Status.NAO_PREVISTO)
+            ));
+    }
+}
+```
+
+Ritmo sugerido: 3 minutos para explicar as regras em voz alta; 17 para implementar; 8 para acrescentar testes de listas vazias, validações e preservação das entradas; 2 para justificar complexidade e integração.
+
+Entregue o código e os testes. Só avaliarei sua solução após você enviá-la, considerando correção, legibilidade, estruturas de dados, cobertura e manutenibilidade. Não há código de produção nem gabarito neste desafio.

@@ -1,0 +1,2090 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Conciliação de pagamentos · Ebook Java 17</title><style>
+:root{--navy:#102a43;--ink:#243b53;--teal:#087f8c;--muted:#526d82;--paper:#f6f8fa;--line:#d9e5ec;color-scheme:light}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:32px}body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.8 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--teal);text-underline-offset:4px}nav{position:fixed;inset:0 auto 0 0;width:280px;overflow:auto;background:var(--navy);color:white;padding:32px 23px}nav strong{font-size:21px;display:block;line-height:1.3}nav small{color:#a7c7d8}nav a{display:block;color:#c9dbe5;text-decoration:none;line-height:1.5;padding:9px 0;font-size:13px}nav a:hover,nav a:focus{color:#d9f28c}nav ol{list-style:none;padding-left:0;margin-top:25px}nav li::marker{color:#6e9fb8;font-size:11px}main{margin-left:280px;max-width:1180px;padding:0 64px 90px}.cover{margin:0 -64px 55px;padding:70px 64px;background:var(--navy);color:white;border-top:7px solid var(--teal)}.cover small{letter-spacing:2px;color:#d9f28c}.cover h1{font-size:clamp(36px,5vw,57px);letter-spacing:-2px;line-height:1.08;margin:25px 0}.cover p{color:#c1d5e3;max-width:650px;font-size:18px}.pill{display:inline-block;border:1px solid #436277;border-radius:30px;padding:4px 14px;margin:10px 8px 0 0;font-size:12px}.cover a{color:#d9f28c}article>h1{display:none}h1,h2,h3,h4{overflow-wrap:anywhere}h2{border-top:1px solid var(--line);padding-top:36px;margin-top:65px;font-size:29px;line-height:1.25;color:var(--navy);letter-spacing:-.7px}h3{font-size:23px;color:var(--teal);margin-top:34px}h4{font-size:19px;color:var(--navy)}article{overflow-wrap:anywhere}p,li{max-width:78ch}pre{overflow:auto;line-height:1.55;font-size:13px;padding:23px;border:1px solid var(--line);border-radius:12px;background:#eaf0f4}code{font-family:"SFMono-Regular",Consolas,monospace;font-size:.86em;background:#eaf0f4;padding:2px 4px;border-radius:3px}pre code{padding:0;background:none}table{border-collapse:collapse;width:100%;font-size:14px;margin:24px 0;background:white}thead{background:#ddecef;text-align:left}td,th{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}td:first-child{min-width:45px}td code{white-space:normal;overflow-wrap:anywhere;line-height:1.5}td{overflow-wrap:anywhere}tr:nth-child(even){background:#f4f8fa}blockquote{border-left:3px solid var(--teal);background:#e6f2f2;margin:25px 0;padding:8px 24px}#progress{position:fixed;top:0;left:280px;height:4px;background:var(--teal);z-index:2;width:0}.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}.toolbar button,.toolbar a{background:transparent;color:#d9f28c;border:1px solid #527285;padding:8px 14px;border-radius:6px;font:inherit;font-size:13px;cursor:pointer;text-decoration:none}:focus-visible{outline:3px solid #c39733;outline-offset:4px}.skip{position:absolute;left:300px;top:-80px;background:white;z-index:4;padding:12px}.skip:focus{top:10px}body.large article{font-size:20px}@media(max-width:1000px){nav{position:static;width:auto;max-height:290px}nav ol{columns:2}main{margin-left:0;padding:0 25px 70px}.cover{margin:0 -25px 30px;padding:45px 25px}#progress{left:0}.skip{left:10px}body{font-size:16px}table{font-size:13px}td,th{padding:8px}}@media(max-width:560px){nav ol{columns:1}.cover h1{letter-spacing:-1px}table{display:block;overflow-x:auto}td{min-width:110px}td:first-child{min-width:46px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media print{nav,.toolbar,#progress{display:none}main{margin:0;max-width:none;padding:0}.cover{margin:0;padding:25px;background:white;color:#102a43}.cover p,.cover small{color:#243b53}pre{white-space:pre-wrap;overflow-wrap:anywhere}h2{break-before:page}tr{break-inside:avoid}a{color:inherit}}
+</style></head><body><a class="skip" href="#leitura">Ir para o conteúdo</a><div id="progress"></div><nav aria-label="Capítulos"><small>CADERNO DE ENGENHARIA / 03</small><strong>Conciliação<br>de pagamentos</strong><ol><li><a href="#do-enunciado-à-implementação-uma-decisão-de-cada-vez">Do
+enunciado à implementação, uma decisão de cada vez</a></li><li><a href="#1-transforme-o-enunciado-em-um-contrato">1. Transforme o
+enunciado em um contrato</a></li><li><a href="#2-pense-na-busca-antes-de-escrever-os-laços">2. Pense na busca
+antes de escrever os laços</a></li><li><a href="#3-o-java-necessário-para-ler-esta-solução">3. O Java necessário
+para ler esta solução</a></li><li><a href="#4-modele-os-dados-sem-antecipar-responsabilidades">4. Modele os
+dados sem antecipar responsabilidades</a></li><li><a href="#5-leia-o-serviço-pelo-fluxo-principal">5. Leia o serviço pelo
+fluxo principal</a></li><li><a href="#6-percorra-o-lote-do-enunciado-sem-pular-etapas">6. Percorra o
+lote do enunciado, sem pular etapas</a></li><li><a href="#7-validar-o-lote-inteiro-não-é-juntar-todos-os-erros">7. Validar
+o lote inteiro não é juntar todos os erros</a></li><li><a href="#8-proteja-as-entradas-e-a-resposta">8. Proteja as entradas e a
+resposta</a></li><li><a href="#9-explique-a-complexidade-com-precisão">9. Explique a
+complexidade com precisão</a></li><li><a href="#10-use-tdd-como-um-roteiro-de-construção">10. Use TDD como um
+roteiro de construção</a></li><li><a href="#11-entenda-o-que-os-testes-realmente-verificam">11. Entenda o
+que os testes realmente verificam</a></li><li><a href="#12-maven-como-o-projeto-é-montado">12. Maven: como o projeto é
+montado</a></li><li><a href="#13-o-exemplo-executável-e-a-fronteira-da-aplicação">13. O
+exemplo executável e a fronteira da aplicação</a></li><li><a href="#14-resolva-erros-sem-alterar-o-contrato">14. Resolva erros sem
+alterar o contrato</a></li><li><a href="#15-exercícios-para-confirmar-o-entendimento">15. Exercícios para
+confirmar o entendimento</a></li><li><a href="#16-explique-a-solução-com-suas-próprias-palavras">16. Explique a
+solução com suas próprias palavras</a></li><li><a href="#referências-para-continuar-estudando">Referências para continuar
+estudando</a></li></ol></nav><main><header class="cover"><small>DO ENUNCIADO AO CÓDIGO</small><h1>Um lote.<br>Quatro respostas.</h1><p>Entenda como pensar, construir e testar um conciliador de pagamentos em Java. Cada decisão tem um motivo; cada linha tem uma explicação.</p><span class="pill">Java 17</span><span class="pill">JUnit 5</span><span class="pill">29.10.2026</span><div class="toolbar"><button id="type" aria-pressed="false">Aumentar texto</button><button id="print">Imprimir leitura</button><a href="https://github.com/wesleyvieira99/conciliadorTransacoes">Código no GitHub ↗</a></div></header><article id="leitura" tabindex="-1"><h1 id="conciliação-de-pagamentos-em-java">Conciliação de pagamentos em
+Java</h1>
+<h2 id="do-enunciado-à-implementação-uma-decisão-de-cada-vez">Do
+enunciado à implementação, uma decisão de cada vez</h2>
+<p><strong>Um guia de estudo para o Desafio #03 · Java 17 · JUnit
+5</strong></p>
+<p>Conciliar é comparar duas visões do mesmo pagamento e explicar o que
+aconteceu. Neste desafio, uma lista informa o que era esperado; outra
+informa o que o parceiro efetivamente liquidou. Sua tarefa é relacionar
+referências, comparar valores e devolver uma classificação
+previsível.</p>
+<p>Você não precisa conhecer um framework para acompanhar este livro.
+Vamos construir o raciocínio com listas, mapas, condições e pequenos
+tipos de dados. Quando aparecer uma palavra nova, ela será conectada à
+linha de código que precisa dela.</p>
+<p>O exercício é fictício, inspirado no contexto de um banco digital.
+Ele não é uma questão oficial do Nubank. A referência identifica um
+pagamento, não uma fatura inteira: somar pagamentos de uma fatura,
+atualizar saldos e chamar sistemas externos estão fora do contrato.</p>
+<p>Leia primeiro para entender o fluxo. Depois execute o projeto e
+refaça os exemplos com papel e lápis. A explicação linha a linha serve
+como apoio à leitura do código; não é necessário decorar cada palavra
+para começar.</p>
+<h2 id="1-transforme-o-enunciado-em-um-contrato">1. Transforme o
+enunciado em um contrato</h2>
+<p>Um contrato responde três perguntas: o que entra, o que sai e o que
+torna uma entrada inválida. Separar essas perguntas evita começar pela
+ferramenta e descobrir tarde que a solução atende a uma regra
+diferente.</p>
+<p>A entrada contém duas listas de <strong>Lancamento</strong>. Cada
+lançamento possui uma referência textual e um valor inteiro em centavos.
+A saída é uma lista de <strong>Resultado</strong>, formada por
+referência e status. Portanto, não precisamos acrescentar à resposta o
+valor esperado, o valor liquidado ou uma mensagem livre: esses campos
+não foram pedidos.</p>
+<p>Existe exatamente um resultado para cada referência que aparece em
+pelo menos uma das listas. Se uma referência está nas duas, ela continua
+produzindo apenas um resultado. Se as duas listas estão vazias, não
+existe referência para classificar, e a saída também fica vazia.</p>
+<h3 id="os-quatro-estados-possíveis">Os quatro estados possíveis</h3>
+<table>
+<thead>
+<tr>
+<th>Situação da referência</th>
+<th style="text-align: right;">Esperado</th>
+<th style="text-align: right;">Liquidado</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Presente nos dois lados, valores iguais</td>
+<td style="text-align: right;">2.000 centavos</td>
+<td style="text-align: right;">2.000 centavos</td>
+<td>CONCILIADO</td>
+</tr>
+<tr>
+<td>Presente nos dois lados, valores diferentes</td>
+<td style="text-align: right;">1.000 centavos</td>
+<td style="text-align: right;">900 centavos</td>
+<td>VALOR_DIVERGENTE</td>
+</tr>
+<tr>
+<td>Presente somente nos esperados</td>
+<td style="text-align: right;">3.000 centavos</td>
+<td style="text-align: right;">Ausente</td>
+<td>NAO_LIQUIDADO</td>
+</tr>
+<tr>
+<td>Presente somente nos liquidados</td>
+<td style="text-align: right;">Ausente</td>
+<td style="text-align: right;">4.000 centavos</td>
+<td>NAO_PREVISTO</td>
+</tr>
+</tbody>
+</table>
+<p>“Ausente” não significa zero. Zero é um valor inválido neste
+exercício; ausência significa que aquela chave não existe na lista
+correspondente. Preservar essa diferença será importante quando o código
+utilizar <strong>Long</strong> para representar uma consulta que pode
+não encontrar nada.</p>
+<p>A ordem também é parte do contrato. Primeiro aparecem todas as
+referências dos esperados, na sequência original. Depois aparecem
+somente as referências exclusivas dos liquidados, na ordem de chegada
+nessa segunda lista. Não é uma ordenação alfabética nem uma organização
+por status.</p>
+<h3 id="o-que-deve-ser-rejeitado">O que deve ser rejeitado</h3>
+<p>Uma lista nula é inválida, mas uma lista vazia é válida. Um elemento
+nulo dentro da lista também é inválido. A referência não pode ser nula,
+vazia ou composta apenas de caracteres considerados espaços em branco
+por <strong>String.isBlank()</strong>. O valor deve ser estritamente
+positivo.</p>
+<p>Uma mesma referência não pode aparecer duas vezes dentro de uma
+lista, mesmo que os valores sejam iguais. Entretanto, aparecer uma vez
+em cada lista é permitido: essa é justamente a situação que possibilita
+comparar os pagamentos.</p>
+<p>A comparação da referência é exata. <strong>pag-1</strong>,
+<strong>PAG-1</strong> e <code>" pag-1 "</code> são três chaves
+diferentes. Os espaços em uma referência não vazia não são removidos
+automaticamente. Não use <strong>trim()</strong>, conversão para
+minúsculas ou outra normalização “para ajudar”: isso mudaria a regra
+recebida.</p>
+<p>A documentação de <a
+href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html">String
+no Java 17</a> detalha as operações de texto. Aqui, fazemos a escolha de
+negócio de validar conteúdo em branco sem transformar as referências
+aceitas.</p>
+<h2 id="2-pense-na-busca-antes-de-escrever-os-laços">2. Pense na busca
+antes de escrever os laços</h2>
+<p>Uma primeira ideia costuma ser: para cada esperado, percorrer todos
+os liquidados até encontrar a mesma referência. A ideia é simples de
+visualizar, mas pode repetir muito trabalho. Com mil esperados e mil
+liquidados, uma busca completa para cada esperado pode fazer
+aproximadamente um milhão de comparações.</p>
+<p>O enunciado pede tempo médio proporcional à soma dos tamanhos das
+listas. Precisamos organizar os dados para encontrar rapidamente um
+valor por referência, em vez de procurar sempre desde o início.</p>
+<p>Um <strong>Map</strong> associa uma chave a um valor. Neste problema,
+a chave é a referência do pagamento e o valor é a quantidade de
+centavos. Podemos pensar no índice abaixo:</p>
+<table>
+<thead>
+<tr>
+<th>Chave</th>
+<th style="text-align: right;">Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pag-2</td>
+<td style="text-align: right;">2000</td>
+</tr>
+<tr>
+<td>pag-1</td>
+<td style="text-align: right;">1000</td>
+</tr>
+<tr>
+<td>pag-3</td>
+<td style="text-align: right;">3000</td>
+</tr>
+</tbody>
+</table>
+<p>A pergunta “qual o valor de pag-1?” passa a ser uma consulta por
+chave. O mapa também ajuda a detectar duplicatas durante sua
+construção.</p>
+<h3 id="por-que-linkedhashmap">Por que LinkedHashMap?</h3>
+<p>O tipo <strong>Map</strong> descreve as operações de um mapa, mas não
+promete uma ordem universal de percurso. <strong>HashMap</strong> não
+oferece a ordem de inserção exigida aqui. <strong>TreeMap</strong>
+ordenaria as chaves, o que também não corresponde à sequência
+recebida.</p>
+<p>A implementação escolhida é <strong>LinkedHashMap</strong>, na
+configuração padrão de ordem de inserção. Ela permite buscar por chave e
+percorrer as entradas na sequência em que foram incluídas. Essa
+propriedade vale tanto para o índice dos esperados quanto para o dos
+liquidados. Consulte a <a
+href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html">documentação
+de LinkedHashMap</a> para distinguir ordem de inserção de configurações
+baseadas em acesso.</p>
+<p>O plano fica pequeno o bastante para ser explicado antes do
+código:</p>
+<ol type="1">
+<li>Validar e indexar os esperados.</li>
+<li>Validar e indexar os liquidados.</li>
+<li>Percorrer os esperados, produzindo seus resultados.</li>
+<li>Percorrer os liquidados e acrescentar apenas as referências ausentes
+dos esperados.</li>
+<li>Devolver uma lista não modificável.</li>
+</ol>
+<p>Há dois mapas porque a duplicidade tem escopo por lista. Misturar
+tudo em um único mapa de entrada dificultaria distinguir a repetição
+inválida dentro de um lado da presença válida nos dois lados.</p>
+<h2 id="3-o-java-necessário-para-ler-esta-solução">3. O Java necessário
+para ler esta solução</h2>
+<h3 id="package-arquivo-e-import">Package, arquivo e import</h3>
+<p>A declaração <strong>package br.com.wesley.conciliacao;</strong>
+identifica o pacote dos tipos. No projeto, os arquivos de produção ficam
+em <strong>src/main/java/br/com/wesley/conciliacao</strong>. Essa
+organização ajuda o compilador e as ferramentas a localizar classes sem
+confundir nomes iguais de partes diferentes de um sistema.</p>
+<p>Um <strong>import</strong> permite usar o nome curto de um tipo de
+outro pacote. <strong>import java.util.List;</strong> autoriza escrever
+<strong>List</strong> em vez de repetir <strong>java.util.List</strong>.
+Ele não instala uma dependência, não copia o código da biblioteca e não
+cria um objeto.</p>
+<p>As coleções usadas pertencem à biblioteca padrão do Java. Não é
+necessário instalar um pacote separado para obter
+<strong>ArrayList</strong>, <strong>LinkedHashMap</strong>,
+<strong>List</strong> ou <strong>Map</strong>. Já o JUnit é uma
+dependência de testes declarada no Maven.</p>
+<p>Os cinco tipos da aplicação estão no mesmo pacote, por isso se
+enxergam sem imports entre eles. <strong>String</strong>,
+<strong>Long</strong>, <strong>System</strong> e
+<strong>IllegalArgumentException</strong> pertencem a
+<strong>java.lang</strong>, pacote disponibilizado automaticamente. Não
+ver um import desses nomes é normal.</p>
+<h3 id="classe-objeto-e-método">Classe, objeto e método</h3>
+<p><strong>Conciliador</strong> é uma classe: ela descreve o
+comportamento do serviço. <strong>new Conciliador()</strong> cria uma
+instância dessa classe. O método <strong>conciliar</strong> recebe
+argumentos e devolve uma lista de resultados.</p>
+<p><strong>public</strong> permite que o tipo ou método seja acessado de
+fora de seu pacote, respeitadas as demais regras da linguagem.
+<strong>private</strong> limita os métodos auxiliares à própria classe.
+Essa separação deixa um ponto de entrada claro e esconde detalhes que
+não precisam virar contrato público.</p>
+<p>A classe é <strong>final</strong>, portanto não pode ser estendida
+por herança. Isso não torna automaticamente todos os seus objetos
+imutáveis. A independência entre chamadas vem do fato de os dados de
+trabalho serem variáveis locais, sem campos mutáveis compartilhados.</p>
+<p>O método público não precisa declarar <strong>throws
+IllegalArgumentException</strong> para lançar essa exceção. Ela é uma
+exceção não verificada: o chamador pode capturá-la, mas o compilador não
+obriga uma cláusula de tratamento.</p>
+<h3 id="generics-o-que-cabe-em-cada-coleção">Generics: o que cabe em
+cada coleção</h3>
+<p>Em <code>List&lt;Lancamento&gt;</code>, o trecho entre os sinais de
+menor e maior informa que a lista contém lançamentos. Em
+<code>List&lt;Resultado&gt;</code>, ela contém resultados. O compilador
+utiliza essa informação para detectar várias misturas indevidas antes da
+execução.</p>
+<p><code>Map&lt;String, Long&gt;</code> possui dois parâmetros: o tipo
+da chave e o tipo do valor. <code>Map.Entry&lt;String, Long&gt;</code>
+representa um par encontrado durante o percurso do mapa. A entrada
+fornece a chave com <strong>getKey()</strong> e o valor com
+<strong>getValue()</strong>.</p>
+<p>O diamante vazio em <code>new ArrayList&lt;&gt;()</code> não
+significa “sem tipo”. O compilador infere o parâmetro a partir do
+contexto. A variável pode ser declarada como
+<code>List&lt;Resultado&gt;</code> e receber uma instância de
+<strong>ArrayList</strong>, porque essa classe implementa a interface
+<strong>List</strong>.</p>
+<h3 id="long-e-long-número-e-objeto">long e Long: número e objeto</h3>
+<p><strong>long</strong> é um tipo primitivo inteiro de 64 bits com
+sinal. <strong>Long</strong> é o tipo objeto que representa esse valor.
+Um <strong>long</strong> não pode receber <strong>null</strong>; uma
+variável <strong>Long</strong> pode.</p>
+<p>Os valores dos lançamentos são <strong>long</strong>, como
+solicitado. O mapa usa <strong>Long</strong> porque parâmetros genéricos
+não aceitam tipos primitivos. Quando o valor entra no mapa, o Java pode
+convertê-lo automaticamente de <strong>long</strong> para
+<strong>Long</strong>: isso se chama boxing. A conversão inversa é
+unboxing.</p>
+<p>Ao consultar uma chave inexistente com <strong>get</strong>,
+recebemos <strong>null</strong>. Isso explica a assinatura de
+<strong>classificar</strong>: o esperado é <strong>long</strong>, pois
+existe naquele percurso; o liquidado é <strong>Long</strong>, pois pode
+estar ausente.</p>
+<p>A solução verifica primeiro se o liquidado é nulo. Só depois utiliza
+<strong>longValue()</strong> para comparar números. Sem essa guarda,
+tentar extrair o primitivo de uma referência nula causaria
+<strong>NullPointerException</strong>.</p>
+<p>Evite comparar dois objetos <strong>Long</strong> com
+<strong>==</strong> esperando sempre comparar valores. Entre
+referências, esse operador testa identidade de objeto. Alguns valores
+podem compartilhar objetos e mascarar o erro em exemplos pequenos. Na
+solução, a comparação acontece entre primitivos, deixando a intenção
+explícita. A distinção está documentada na API de <a
+href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html">Long</a>.</p>
+<h3 id="centavos-l-e-separadores-visuais">Centavos, L e separadores
+visuais</h3>
+<p><strong>2_000L</strong> representa dois mil centavos, equivalentes a
+R$ 20,00. O sublinhado facilita a leitura do literal e não altera seu
+valor. O sufixo <strong>L</strong> indica um literal do tipo
+<strong>long</strong>.</p>
+<p>Usar inteiros em centavos evita representar estes valores monetários
+como aproximações binárias de números com casas decimais. O exercício
+compara os valores recebidos; não calcula juros, não converte moedas e
+não soma uma fatura.</p>
+<p>Isso também importa para valores grandes. A solução não converte os
+centavos para <strong>int</strong>, que possui alcance menor. Como não
+há soma nem multiplicação do dinheiro no algoritmo, comparar valores
+positivos até <strong>Long.MAX_VALUE</strong> não introduz overflow
+aritmético. Se o requisito passar a incluir totais, essa nova operação
+precisará de uma análise própria.</p>
+<h3 id="null-e-curto-circuito">null e curto-circuito</h3>
+<p>Observe a condição <strong>referencia == null ||
+referencia.isBlank()</strong>. O operador <strong>||</strong> avalia
+primeiro o lado esquerdo. Se ele já for verdadeiro, o lado direito não é
+executado.</p>
+<p>Assim, quando a referência é nula, <strong>isBlank()</strong> não é
+chamado. Quando não é nula, a segunda parte verifica se falta conteúdo
+significativo. Inverter a ordem das verificações criaria o risco de
+chamar um método sobre <strong>null</strong>.</p>
+<p>Não substitua <strong>||</strong> por <strong>|</strong> nesse
+trecho. Embora o operador simples também possa aparecer em expressões
+booleanas, ele não fornece o mesmo curto-circuito. A avaliação
+condicional é definida na <a
+href="https://docs.oracle.com/javase/specs/jls/se17/html/jls-15.html#jls-15.24">especificação
+da linguagem Java 17</a>.</p>
+<h2 id="4-modele-os-dados-sem-antecipar-responsabilidades">4. Modele os
+dados sem antecipar responsabilidades</h2>
+<h3 id="lancamento-aquilo-que-chegou">Lancamento: aquilo que chegou</h3>
+<p>O record <strong>Lancamento</strong> reúne a referência e os
+centavos. Um record fornece construtor, acessores e operações de
+igualdade associadas aos seus componentes, reduzindo o código repetitivo
+de um pequeno portador de dados.</p>
+<h3 id="código-completo-lancamentojava">Código completo:
+Lancamento.java</h3>
+<pre class="java"><code>package br.com.wesley.conciliacao;
+
+public record Lancamento(String referencia, long valorCentavos) {
+}</code></pre>
+<h3 id="cada-linha-uma-intenção">Cada linha, uma intenção</h3>
+<table>
+<thead>
+<tr>
+<th>Linha</th>
+<th>Instrução e explicação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>package br.com.wesley.conciliacao;</code><br>Coloca o tipo de
+entrada no pacote da solução, junto do conciliador.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>public record Lancamento(String referencia, long
+valorCentavos) {</code><br>Declara o record público com referência
+String e valor primitivo long; o Java fornece construtor, acessores e
+igualdade pelos componentes.</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>}</code><br>Fecha o corpo vazio do record; não há validação no
+construtor, pois ela pertence ao serviço.</td>
+</tr>
+</tbody>
+</table>
+<p>O acesso é feito por <strong>referencia()</strong> e
+<strong>valorCentavos()</strong>, não por getters obrigatoriamente
+chamados <strong>getReferencia()</strong> e
+<strong>getValorCentavos()</strong>. Os acessores têm os nomes dos
+componentes.</p>
+<p>Este record é deliberadamente passivo. Ele pode ser construído com
+uma referência nula ou um valor negativo; quem rejeita esses dados,
+neste projeto, é o serviço de conciliação. Isso mantém todas as regras
+de aceitação do lote no mesmo lugar e permite que os testes entreguem
+dados inválidos ao ponto de entrada que precisa validá-los.</p>
+<p>Não acrescente validação ao construtor do record sem reconsiderar o
+contrato e os testes. Uma exceção lançada durante a montagem da entrada
+ocorre antes de <strong>conciliar</strong> ser chamado. Seria uma
+mudança de responsabilidade, não apenas uma melhoria cosmética.</p>
+<h3 id="status-quatro-alternativas-conhecidas">Status: quatro
+alternativas conhecidas</h3>
+<p>Um <strong>enum</strong> descreve um conjunto fechado de constantes
+com nome. Ele evita que cada parte do programa invente uma grafia
+diferente para a mesma classificação.</p>
+<h3 id="código-completo-statusjava">Código completo: Status.java</h3>
+<pre class="java"><code>package br.com.wesley.conciliacao;
+
+public enum Status {
+    CONCILIADO,
+    VALOR_DIVERGENTE,
+    NAO_LIQUIDADO,
+    NAO_PREVISTO
+}</code></pre>
+<h3 id="cada-linha-uma-intenção-1">Cada linha, uma intenção</h3>
+<table>
+<thead>
+<tr>
+<th>Linha</th>
+<th>Instrução e explicação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>package br.com.wesley.conciliacao;</code><br>Coloca o enum no
+pacote da solução para ser utilizado pelos resultados e pelo
+serviço.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>public enum Status {</code><br>Declara o enum público que
+restringe os status às constantes definidas a seguir.</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>CONCILIADO,</code><br>Define CONCILIADO para uma referência
+presente nos dois lados com valores iguais.</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>VALOR_DIVERGENTE,</code><br>Define VALOR_DIVERGENTE para uma
+referência presente nos dois lados com valores diferentes.</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>NAO_LIQUIDADO,</code><br>Define NAO_LIQUIDADO para uma
+referência encontrada somente nos esperados.</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>NAO_PREVISTO</code><br>Define NAO_PREVISTO para uma referência
+encontrada somente nos liquidados; é a última constante.</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>}</code><br>Fecha a declaração do enum.</td>
+</tr>
+</tbody>
+</table>
+<p>Usar <strong>Status.NAO_LIQUIDADO</strong> é diferente de guardar uma
+String livre como “nao liquidado”. O compilador consegue verificar que o
+argumento pertence ao tipo <strong>Status</strong>. Os nomes também
+aparecem de maneira consistente nos testes e na saída do exemplo.</p>
+<h3 id="resultado-uma-decisão-por-referência">Resultado: uma decisão por
+referência</h3>
+<p>O record <strong>Resultado</strong> contém a referência classificada
+e o status correspondente.</p>
+<h3 id="código-completo-resultadojava">Código completo:
+Resultado.java</h3>
+<pre class="java"><code>package br.com.wesley.conciliacao;
+
+public record Resultado(String referencia, Status status) {
+}</code></pre>
+<h3 id="cada-linha-uma-intenção-2">Cada linha, uma intenção</h3>
+<table>
+<thead>
+<tr>
+<th>Linha</th>
+<th>Instrução e explicação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>package br.com.wesley.conciliacao;</code><br>Declara o mesmo
+pacote dos demais tipos de domínio.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>public record Resultado(String referencia, Status status)
+{</code><br>Declara o record público de saída com referência e Status;
+seus acessores são referencia() e status().</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>}</code><br>Fecha o record sem comportamento adicional; a
+classificação é produzida pelo conciliador.</td>
+</tr>
+</tbody>
+</table>
+<p>Dois resultados construídos separadamente, mas com os mesmos
+componentes, podem ser comparados por valor. Essa característica permite
+escrever uma lista esperada no teste e compará-la diretamente à resposta
+do conciliador.</p>
+<p>Records não tornam automaticamente imutável qualquer objeto que
+carreguem. Neste modelo, porém, os componentes são
+<strong>String</strong>, um primitivo ou um enum, sem uma coleção
+mutável exposta. A <a
+href="https://docs.oracle.com/en/java/javase/17/language/records.html">documentação
+de records</a> ajuda a entender o que a linguagem gera e o que continua
+sendo uma escolha do projeto.</p>
+<h2 id="5-leia-o-serviço-pelo-fluxo-principal">5. Leia o serviço pelo
+fluxo principal</h2>
+<p>Antes de entrar nos detalhes, encontre a sequência de
+responsabilidades no método público. Ele prepara os índices, monta os
+resultados e devolve a resposta. A validação de um lançamento e a
+classificação de valores ficam em métodos menores.</p>
+<h3 id="código-completo-conciliadorjava">Código completo:
+Conciliador.java</h3>
+<pre class="java"><code>package br.com.wesley.conciliacao;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+public final class Conciliador {
+
+    public List&lt;Resultado&gt; conciliar(
+            List&lt;Lancamento&gt; esperados, List&lt;Lancamento&gt; liquidados) {
+        Map&lt;String, Long&gt; esperadosPorReferencia = indexarEValidar(esperados, &quot;esperados&quot;);
+        Map&lt;String, Long&gt; liquidadosPorReferencia = indexarEValidar(liquidados, &quot;liquidados&quot;);
+
+        List&lt;Resultado&gt; resultados = new ArrayList&lt;&gt;();
+        for (Map.Entry&lt;String, Long&gt; esperado : esperadosPorReferencia.entrySet()) {
+            String referencia = esperado.getKey();
+            Status status = classificar(
+                    esperado.getValue(), liquidadosPorReferencia.get(referencia));
+            resultados.add(new Resultado(referencia, status));
+        }
+        for (String referencia : liquidadosPorReferencia.keySet()) {
+            if (!esperadosPorReferencia.containsKey(referencia)) {
+                resultados.add(new Resultado(referencia, Status.NAO_PREVISTO));
+            }
+        }
+        return List.copyOf(resultados);
+    }
+
+    private Map&lt;String, Long&gt; indexarEValidar(List&lt;Lancamento&gt; lancamentos, String origem) {
+        if (lancamentos == null) {
+            throw new IllegalArgumentException(origem + &quot;: a lista não pode ser nula.&quot;);
+        }
+        Map&lt;String, Long&gt; porReferencia = new LinkedHashMap&lt;&gt;();
+        int indice = 0;
+        for (Lancamento lancamento : lancamentos) {
+            validarLancamento(lancamento, origem, indice);
+            Long anterior = porReferencia.putIfAbsent(
+                    lancamento.referencia(), lancamento.valorCentavos());
+            if (anterior != null) {
+                throw new IllegalArgumentException(
+                        origem + &quot;[&quot; + indice + &quot;]: referência repetida: &quot; + lancamento.referencia());
+            }
+            indice++;
+        }
+        return porReferencia;
+    }
+
+    private void validarLancamento(Lancamento lancamento, String origem, int indice) {
+        String local = origem + &quot;[&quot; + indice + &quot;]&quot;;
+        if (lancamento == null) {
+            throw new IllegalArgumentException(local + &quot;: o lançamento não pode ser nulo.&quot;);
+        }
+        String referencia = lancamento.referencia();
+        if (referencia == null || referencia.isBlank()) {
+            throw new IllegalArgumentException(local + &quot;: a referência não pode ser nula ou em branco.&quot;);
+        }
+        if (lancamento.valorCentavos() &lt;= 0) {
+            throw new IllegalArgumentException(local + &quot;: o valor em centavos deve ser positivo.&quot;);
+        }
+    }
+
+    private Status classificar(long valorEsperado, Long valorLiquidado) {
+        if (valorLiquidado == null) {
+            return Status.NAO_LIQUIDADO;
+        }
+        return valorEsperado == valorLiquidado.longValue()
+                ? Status.CONCILIADO
+                : Status.VALOR_DIVERGENTE;
+    }
+}</code></pre>
+<h3 id="cada-linha-uma-intenção-3">Cada linha, uma intenção</h3>
+<table>
+<thead>
+<tr>
+<th>Linha</th>
+<th>Instrução e explicação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>package br.com.wesley.conciliacao;</code><br>Declara o pacote
+do serviço, o mesmo dos records e do enum usados pela solução.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>import java.util.ArrayList;</code><br>Importa ArrayList, a
+implementação mutável usada somente para montar a resposta
+internamente.</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>import java.util.LinkedHashMap;</code><br>Importa
+LinkedHashMap, que preserva a ordem de inserção ao construir os
+índices.</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>import java.util.List;</code><br>Importa a interface List,
+usada nas entradas e no retorno do método público.</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>import java.util.Map;</code><br>Importa Map, o contrato dos
+índices por referência e de suas entradas.</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>public final class Conciliador {</code><br>Declara o serviço
+público e final; final impede herança, enquanto a ausência de campos
+mutáveis mantém o trabalho por chamada.</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>public List&lt;Resultado&gt; conciliar(</code><br>Inicia o
+método público conciliar e declara que seu retorno é uma lista de
+Resultado.</td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>List&lt;Lancamento&gt; esperados, List&lt;Lancamento&gt;
+liquidados) {</code><br>Recebe as duas listas de Lancamento e abre o
+corpo do método; a primeira representa expectativas e a segunda,
+liquidações.</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>Map&lt;String, Long&gt; esperadosPorReferencia =
+indexarEValidar(esperados, "esperados");</code><br>Valida todos os
+esperados até o primeiro erro e, se forem aceitos, obtém o índice com
+sua ordem original.</td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>Map&lt;String, Long&gt; liquidadosPorReferencia =
+indexarEValidar(liquidados, "liquidados");</code><br>Faz a mesma
+preparação dos liquidados; a classificação só prossegue se os dois
+índices forem válidos.</td>
+</tr>
+<tr>
+<td>15</td>
+<td><code>List&lt;Resultado&gt; resultados = new
+ArrayList&lt;&gt;();</code><br>Cria uma lista mutável local para
+acumular os resultados, depois de concluída a validação das
+entradas.</td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>for (Map.Entry&lt;String, Long&gt; esperado :
+esperadosPorReferencia.entrySet()) {</code><br>Percorre os pares de
+referência e valor dos esperados na ordem de inserção preservada pelo
+LinkedHashMap.</td>
+</tr>
+<tr>
+<td>17</td>
+<td><code>String referencia = esperado.getKey();</code><br>Extrai a
+referência do par atual e a guarda em uma variável local.</td>
+</tr>
+<tr>
+<td>18</td>
+<td><code>Status status = classificar(</code><br>Inicia a chamada ao
+método que decide o status deste pagamento esperado.</td>
+</tr>
+<tr>
+<td>19</td>
+<td><code>esperado.getValue(),
+liquidadosPorReferencia.get(referencia));</code><br>Passa o valor
+esperado e consulta o valor liquidado pela mesma referência; a consulta
+pode devolver null.</td>
+</tr>
+<tr>
+<td>20</td>
+<td><code>resultados.add(new Resultado(referencia,
+status));</code><br>Cria um Resultado com a referência atual e o status
+calculado e o acrescenta à resposta.</td>
+</tr>
+<tr>
+<td>21</td>
+<td><code>}</code><br>Encerra o percurso dos esperados; cada referência
+desse lado já possui um resultado.</td>
+</tr>
+<tr>
+<td>22</td>
+<td><code>for (String referencia : liquidadosPorReferencia.keySet())
+{</code><br>Percorre as referências dos liquidados na ordem em que
+chegaram.</td>
+</tr>
+<tr>
+<td>23</td>
+<td><code>if (!esperadosPorReferencia.containsKey(referencia))
+{</code><br>Verifica, com a negação de containsKey, se a referência não
+existe no índice dos esperados.</td>
+</tr>
+<tr>
+<td>24</td>
+<td><code>resultados.add(new Resultado(referencia,
+Status.NAO_PREVISTO));</code><br>Acrescenta NAO_PREVISTO somente para um
+liquidado exclusivo, evitando repetir referências já classificadas.</td>
+</tr>
+<tr>
+<td>25</td>
+<td><code>}</code><br>Fecha a condição que seleciona liquidados
+exclusivos.</td>
+</tr>
+<tr>
+<td>26</td>
+<td><code>}</code><br>Encerra o percurso complementar dos
+liquidados.</td>
+</tr>
+<tr>
+<td>27</td>
+<td><code>return List.copyOf(resultados);</code><br>Devolve uma lista
+não modificável com o conteúdo construído, sem expor o ArrayList de
+trabalho.</td>
+</tr>
+<tr>
+<td>28</td>
+<td><code>}</code><br>Fecha o método público conciliar.</td>
+</tr>
+<tr>
+<td>30</td>
+<td><code>private Map&lt;String, Long&gt;
+indexarEValidar(List&lt;Lancamento&gt; lancamentos, String origem)
+{</code><br>Declara o auxiliar privado que valida uma lista e devolve
+seu índice; origem identifica o lado nas mensagens de erro.</td>
+</tr>
+<tr>
+<td>31</td>
+<td><code>if (lancamentos == null) {</code><br>Verifica se o próprio
+argumento da lista é null antes de tentar percorrê-lo.</td>
+</tr>
+<tr>
+<td>32</td>
+<td><code>throw new IllegalArgumentException(origem + ": a lista não
+pode ser nula.");</code><br>Rejeita a lista nula com
+IllegalArgumentException, incluindo sua origem na mensagem.</td>
+</tr>
+<tr>
+<td>33</td>
+<td><code>}</code><br>Fecha a guarda de nulidade da lista.</td>
+</tr>
+<tr>
+<td>34</td>
+<td><code>Map&lt;String, Long&gt; porReferencia = new
+LinkedHashMap&lt;&gt;();</code><br>Cria um índice local com chaves
+String e valores Long, preservando a ordem de inserção.</td>
+</tr>
+<tr>
+<td>35</td>
+<td><code>int indice = 0;</code><br>Inicia em zero o contador usado para
+identificar a posição de um lançamento inválido.</td>
+</tr>
+<tr>
+<td>36</td>
+<td><code>for (Lancamento lancamento : lancamentos) {</code><br>Percorre
+cada lançamento da lista recebida sem remover ou substituir
+elementos.</td>
+</tr>
+<tr>
+<td>37</td>
+<td><code>validarLancamento(lancamento, origem,
+indice);</code><br>Valida o objeto, a referência e o valor antes de
+tentar inseri-los no mapa.</td>
+</tr>
+<tr>
+<td>38</td>
+<td><code>Long anterior = porReferencia.putIfAbsent(</code><br>Inicia a
+inserção condicional e guarda o valor anterior associado à referência,
+se houver.</td>
+</tr>
+<tr>
+<td>39</td>
+<td><code>lancamento.referencia(),
+lancamento.valorCentavos());</code><br>Usa a referência como chave e os
+centavos como valor; o long é convertido para Long ao entrar no
+mapa.</td>
+</tr>
+<tr>
+<td>40</td>
+<td><code>if (anterior != null) {</code><br>Como o mapa não armazena
+valores nulos, um valor anterior não nulo identifica uma referência
+repetida.</td>
+</tr>
+<tr>
+<td>41</td>
+<td><code>throw new IllegalArgumentException(</code><br>Inicia o
+lançamento da exceção que rejeita a duplicata, mesmo quando o valor
+repetido é igual.</td>
+</tr>
+<tr>
+<td>42</td>
+<td><code>origem + "[" + indice + "]: referência repetida: " +
+lancamento.referencia());</code><br>Constrói a mensagem com origem,
+índice e referência repetida; fecha a construção da exceção.</td>
+</tr>
+<tr>
+<td>43</td>
+<td><code>}</code><br>Fecha a condição de rejeição da duplicidade.</td>
+</tr>
+<tr>
+<td>44</td>
+<td><code>indice++;</code><br>Avança o índice somente após o lançamento
+atual ser validado e inserido.</td>
+</tr>
+<tr>
+<td>45</td>
+<td><code>}</code><br>Encerra o percurso da lista de lançamentos.</td>
+</tr>
+<tr>
+<td>46</td>
+<td><code>return porReferencia;</code><br>Retorna o índice completo
+quando nenhum erro interrompeu a validação.</td>
+</tr>
+<tr>
+<td>47</td>
+<td><code>}</code><br>Fecha o método indexarEValidar.</td>
+</tr>
+<tr>
+<td>49</td>
+<td><code>private void validarLancamento(Lancamento lancamento, String
+origem, int indice) {</code><br>Declara o auxiliar privado sem retorno
+que valida um lançamento e recebe contexto para mensagens.</td>
+</tr>
+<tr>
+<td>50</td>
+<td><code>String local = origem + "[" + indice + "]";</code><br>Monta a
+localização textual, como liquidados[1], a partir da origem e do índice
+iniciado em zero.</td>
+</tr>
+<tr>
+<td>51</td>
+<td><code>if (lancamento == null) {</code><br>Testa se o elemento é null
+antes de chamar qualquer acessor do record.</td>
+</tr>
+<tr>
+<td>52</td>
+<td><code>throw new IllegalArgumentException(local + ": o lançamento não
+pode ser nulo.");</code><br>Rejeita um elemento nulo com a exceção de
+validação prevista no contrato.</td>
+</tr>
+<tr>
+<td>53</td>
+<td><code>}</code><br>Fecha a guarda que protege o acesso ao
+lançamento.</td>
+</tr>
+<tr>
+<td>54</td>
+<td><code>String referencia = lancamento.referencia();</code><br>Obtém a
+referência do record já confirmado como não nulo.</td>
+</tr>
+<tr>
+<td>55</td>
+<td><code>if (referencia == null || referencia.isBlank())
+{</code><br>Rejeita referência nula ou em branco; o curto-circuito de ||
+evita chamar isBlank sobre null.</td>
+</tr>
+<tr>
+<td>56</td>
+<td><code>throw new IllegalArgumentException(local + ": a referência não
+pode ser nula ou em branco.");</code><br>Lança a exceção com a
+localização do item cuja referência não foi aceita.</td>
+</tr>
+<tr>
+<td>57</td>
+<td><code>}</code><br>Fecha a validação da referência sem aplicar trim
+nem alterar seu conteúdo.</td>
+</tr>
+<tr>
+<td>58</td>
+<td><code>if (lancamento.valorCentavos() &lt;= 0) {</code><br>Verifica
+se os centavos são zero ou negativos; ambos são proibidos.</td>
+</tr>
+<tr>
+<td>59</td>
+<td><code>throw new IllegalArgumentException(local + ": o valor em
+centavos deve ser positivo.");</code><br>Rejeita o valor não positivo e
+informa a posição do lançamento.</td>
+</tr>
+<tr>
+<td>60</td>
+<td><code>}</code><br>Fecha a validação do valor em centavos.</td>
+</tr>
+<tr>
+<td>61</td>
+<td><code>}</code><br>Fecha validarLancamento; chegar aqui significa que
+as regras individuais foram atendidas.</td>
+</tr>
+<tr>
+<td>63</td>
+<td><code>private Status classificar(long valorEsperado, Long
+valorLiquidado) {</code><br>Declara a classificação: o esperado sempre
+existe e é long; o liquidado é Long para permitir ausência representada
+por null.</td>
+</tr>
+<tr>
+<td>64</td>
+<td><code>if (valorLiquidado == null) {</code><br>Verifica se a consulta
+ao índice dos liquidados não encontrou valor.</td>
+</tr>
+<tr>
+<td>65</td>
+<td><code>return Status.NAO_LIQUIDADO;</code><br>Classifica como
+NAO_LIQUIDADO e encerra o método antes de qualquer conversão numérica do
+nulo.</td>
+</tr>
+<tr>
+<td>66</td>
+<td><code>}</code><br>Fecha a condição de ausência; daqui em diante o
+valor liquidado é conhecido como não nulo.</td>
+</tr>
+<tr>
+<td>67</td>
+<td><code>return valorEsperado ==
+valorLiquidado.longValue()</code><br>Compara valores primitivos long;
+longValue explicita a extração numérica do Long liquidado.</td>
+</tr>
+<tr>
+<td>68</td>
+<td><code>? Status.CONCILIADO</code><br>No operador condicional, escolhe
+CONCILIADO quando a comparação de valores é verdadeira.</td>
+</tr>
+<tr>
+<td>69</td>
+<td><code>: Status.VALOR_DIVERGENTE;</code><br>Escolhe VALOR_DIVERGENTE
+quando os dois valores existentes são diferentes.</td>
+</tr>
+<tr>
+<td>70</td>
+<td><code>}</code><br>Fecha o método classificar.</td>
+</tr>
+<tr>
+<td>71</td>
+<td><code>}</code><br>Fecha a classe Conciliador.</td>
+</tr>
+</tbody>
+</table>
+<p>O nome <strong>indexarEValidar</strong> informa que a construção do
+mapa não aceita qualquer conteúdo. A função devolve um índice válido ou
+interrompe a chamada com uma exceção. Portanto, quando o primeiro laço
+de resultados começa, os dois lados já passaram pela validação.</p>
+<p>Durante o percurso dos esperados, o programa sempre conhece a
+referência e o valor esperado. Ele consulta o mapa dos liquidados e
+entrega os dois valores a <strong>classificar</strong>. O método
+auxiliar responde apenas à pergunta sobre aquele esperado: está ausente,
+tem valor igual ou tem valor diferente?</p>
+<p>O status <strong>NAO_PREVISTO</strong> não aparece nesse método
+porque ele representa uma situação que o percurso dos esperados não
+consegue encontrar: uma referência que existe exclusivamente no outro
+lado. Essa responsabilidade pertence ao segundo laço.</p>
+<p>A condição
+<strong>!esperadosPorReferencia.containsKey(referencia)</strong> lê-se
+“o índice de esperados não contém esta referência”. O ponto de
+exclamação nega a condição. Quando ela é verdadeira, o serviço
+acrescenta um resultado com <strong>NAO_PREVISTO</strong>.</p>
+<p>Não há necessidade de apagar do mapa os liquidados já classificados.
+Consultar a existência no índice de esperados é suficiente para evitar a
+repetição na saída. Isso mantém o algoritmo fácil de acompanhar: os
+índices são construídos e depois somente consultados.</p>
+<h3 id="como-putifabsent-detecta-a-repetição">Como putIfAbsent detecta a
+repetição</h3>
+<p><strong>putIfAbsent</strong> insere a chave quando ela ainda não
+possui um valor associado e devolve o valor anterior conforme o contrato
+do mapa. Neste código, nenhum valor nulo é armazenado: todos vêm de um
+<strong>long</strong> previamente validado.</p>
+<p>Por isso, retorno nulo significa primeira ocorrência; retorno não
+nulo significa que a referência já apareceu naquela lista. O valor
+anterior pode ser igual ao atual e, ainda assim, a entrada deve ser
+rejeitada.</p>
+<p>Um <strong>put</strong> simples sobrescreveria o valor anterior e
+poderia esconder a duplicata. O mapa, sozinho, não “rejeita duplicados”:
+ele admite somente uma associação por chave, e a aplicação precisa
+interpretar a tentativa de nova associação. Consulte o contrato de <a
+href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#putIfAbsent(K,V)">Map.putIfAbsent</a>
+para não confundir os comportamentos.</p>
+<h2 id="6-percorra-o-lote-do-enunciado-sem-pular-etapas">6. Percorra o
+lote do enunciado, sem pular etapas</h2>
+<p>Vamos usar exatamente as referências e os valores do exemplo inicial.
+A disposição foi escolhida para mostrar todos os status e tornar a regra
+de ordem observável.</p>
+<table>
+<thead>
+<tr>
+<th>Posição</th>
+<th>Esperados</th>
+<th style="text-align: right;">Centavos</th>
+<th>Liquidados</th>
+<th style="text-align: right;">Centavos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>pag-2</td>
+<td style="text-align: right;">2000</td>
+<td>pag-4</td>
+<td style="text-align: right;">4000</td>
+</tr>
+<tr>
+<td>1</td>
+<td>pag-1</td>
+<td style="text-align: right;">1000</td>
+<td>pag-1</td>
+<td style="text-align: right;">900</td>
+</tr>
+<tr>
+<td>2</td>
+<td>pag-3</td>
+<td style="text-align: right;">3000</td>
+<td>pag-2</td>
+<td style="text-align: right;">2000</td>
+</tr>
+</tbody>
+</table>
+<h3 id="primeiro-prepare-os-esperados">Primeiro: prepare os
+esperados</h3>
+<p>O serviço verifica se a lista é nula. Como não é, cria um
+<strong>LinkedHashMap</strong> vazio e começa no índice zero.</p>
+<p>O lançamento <strong>pag-2</strong> existe, sua referência possui
+conteúdo e seu valor é positivo. A chave ainda não está no mapa, então
+ela é inserida. O índice avança. A mesma sequência acontece com
+<strong>pag-1</strong> e <strong>pag-3</strong>.</p>
+<p>Ao terminar, a ordem do mapa é <strong>pag-2 → pag-1 →
+pag-3</strong>. Nenhum resultado foi criado até esse momento. O mapa é
+uma estrutura de consulta interna, não a resposta final.</p>
+<h3 id="segundo-prepare-os-liquidados">Segundo: prepare os
+liquidados</h3>
+<p>A segunda chamada de <strong>indexarEValidar</strong> cria outro
+mapa. Suas inserções ocorrem na ordem <strong>pag-4 → pag-1 →
+pag-2</strong>.</p>
+<p>Encontrar <strong>pag-1</strong> aqui não é duplicidade em relação
+aos esperados. A consulta de repetição acontece no mapa desta lista, que
+começou vazio. Como cada uma dessas chaves aparece uma única vez nos
+liquidados, a validação termina com sucesso.</p>
+<h3 id="terceiro-classifique-cada-esperado">Terceiro: classifique cada
+esperado</h3>
+<p>A primeira referência percorrida é <strong>pag-2</strong>. Seu valor
+esperado é 2000. A consulta no mapa dos liquidados encontra 2000, então
+o status é <strong>CONCILIADO</strong>. A lista de resultados recebe seu
+primeiro elemento.</p>
+<p>Depois vem <strong>pag-1</strong>. O esperado é 1000, mas o liquidado
+é 900. A referência existe nos dois lados, portanto não é ausência; o
+problema é a diferença de valor. O segundo resultado é
+<strong>VALOR_DIVERGENTE</strong>.</p>
+<p>Por fim, vem <strong>pag-3</strong>. O mapa dos liquidados não contém
+essa chave e a consulta devolve <strong>null</strong>.
+<strong>classificar</strong> retorna <strong>NAO_LIQUIDADO</strong>
+antes de tentar extrair qualquer valor numérico desse retorno.</p>
+<h3 id="quarto-acrescente-os-liquidados-exclusivos">Quarto: acrescente
+os liquidados exclusivos</h3>
+<p>O segundo laço percorre <strong>pag-4</strong>,
+<strong>pag-1</strong> e <strong>pag-2</strong>, nessa ordem.
+<strong>pag-4</strong> não existe nos esperados, então entra no fim da
+resposta com <strong>NAO_PREVISTO</strong>.</p>
+<p>As outras duas referências já pertencem ao mapa dos esperados. Elas
+foram classificadas no primeiro laço e não devem gerar uma segunda
+linha.</p>
+<table>
+<thead>
+<tr>
+<th>Ordem final</th>
+<th>Referência</th>
+<th>Status</th>
+<th>Razão</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>pag-2</td>
+<td>CONCILIADO</td>
+<td>2000 é igual a 2000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>pag-1</td>
+<td>VALOR_DIVERGENTE</td>
+<td>1000 é diferente de 900</td>
+</tr>
+<tr>
+<td>3</td>
+<td>pag-3</td>
+<td>NAO_LIQUIDADO</td>
+<td>Não existe nos liquidados</td>
+</tr>
+<tr>
+<td>4</td>
+<td>pag-4</td>
+<td>NAO_PREVISTO</td>
+<td>Não existe nos esperados</td>
+</tr>
+</tbody>
+</table>
+<p>Observe que <strong>pag-4</strong> chegou primeiro na lista do
+parceiro, mas aparece por último no resultado. A prioridade é preservar
+a sequência dos esperados. O índice do parceiro só determina a ordem
+relativa dos seus itens exclusivos.</p>
+<p>Agora altere mentalmente a lista dos liquidados para <strong>pag-5,
+pag-4, pag-2</strong>. As referências exclusivas serão acrescentadas
+como <strong>pag-5, pag-4</strong>, depois de todos os esperados. Essa
+previsão é uma boa forma de verificar se você entendeu o mecanismo, e
+não apenas a saída decorada.</p>
+<h2 id="7-validar-o-lote-inteiro-não-é-juntar-todos-os-erros">7. Validar
+o lote inteiro não é juntar todos os erros</h2>
+<p>A frase “validar o lote inteiro” pode gerar uma dúvida importante.
+Nesta solução, ela significa que a classificação só começa depois de
+todos os elementos dos dois lados terem sido aceitos. Se algo estiver
+errado, a chamada lança uma exceção e não devolve uma lista parcial.</p>
+<p>O algoritmo trabalha em modo <strong>fail-fast</strong>: interrompe
+no primeiro erro encontrado. Ele não percorre o restante da entrada para
+produzir um relatório de todas as falhas. Reunir erros em uma coleção
+seria outro contrato, com outro tipo de retorno ou outra representação
+de rejeição.</p>
+<p>Suponha que todos os esperados sejam válidos, mas o último liquidado
+tenha valor zero. O índice dos esperados já existe, e parte do índice
+dos liquidados pode ter sido construída. Isso é trabalho interno
+descartável. A lista de resultados ainda nem foi criada, porque sua
+declaração vem depois das duas chamadas de validação.</p>
+<p>Também não existe resultado parcial escondido em um campo da classe,
+arquivo ou banco. O serviço não escreve em sistemas externos. Ao lançar
+a exceção, a chamada termina sem retornar normalmente.</p>
+<p>A ordem das guardas evita erros acidentais. Primeiro verificamos a
+lista antes de percorrê-la. Depois verificamos cada lançamento antes de
+chamar seus acessores. Em seguida verificamos a referência antes de
+consultar seu conteúdo. Por fim avaliamos o valor e a duplicidade.</p>
+<p>As mensagens incluem a origem e, quando disponível, o índice do
+elemento. <strong>liquidados[1]</strong> identifica a segunda posição,
+pois índices começam em zero. O contrato exige a categoria
+<strong>IllegalArgumentException</strong>; a mensagem fornece contexto
+para o diagnóstico.</p>
+<p>Não é correto “pular os inválidos” e continuar. Isso ocultaria
+problemas de entrada e faria a resposta parecer completa. Também não é
+correto usar uma lista vazia como sinal de erro: listas vazias são uma
+entrada legítima e podem produzir legitimamente uma saída vazia.</p>
+<h3 id="casos-nulos-merecem-testes-bem-montados">Casos nulos merecem
+testes bem montados</h3>
+<p><strong>List.of(null)</strong> já lança uma exceção durante a criação
+da lista. Assim, esse código não serve para demonstrar que o conciliador
+rejeita um elemento nulo: o serviço nem chega a receber a entrada.</p>
+<p>Para esse teste, monte uma lista que aceite o elemento e só depois
+invoque o método sob teste:</p>
+<pre class="java"><code>List&lt;Lancamento&gt; entrada = new ArrayList&lt;&gt;();
+entrada.add(null);
+
+assertThrows(IllegalArgumentException.class,
+        () -&gt; conciliador.conciliar(entrada, List.of()));</code></pre>
+<p>O exemplo pressupõe os imports de <strong>ArrayList</strong>,
+<strong>List</strong> e das asserções do JUnit. Para testar a própria
+lista nula, passe <strong>null</strong> diretamente como um dos
+argumentos. Para testar uma referência nula, construa <strong>new
+Lancamento(null, 100L)</strong>: o record passivo permite que o serviço
+receba esse caso.</p>
+<h2 id="8-proteja-as-entradas-e-a-resposta">8. Proteja as entradas e a
+resposta</h2>
+<p>As listas recebidas pertencem ao chamador. O conciliador pode
+percorrê-las, mas não deve ordenar, remover ou substituir seus
+elementos. A solução cria mapas próprios para consulta e uma lista
+própria para montar a resposta.</p>
+<p>Isso permite receber tanto listas mutáveis quanto listas criadas por
+<strong>List.of</strong>. Se o algoritmo dependesse de remover um
+liquidado da lista original, ele poderia funcionar em um caso e falhar
+com <strong>UnsupportedOperationException</strong> no outro. Testar
+diferentes implementações de <strong>List</strong> ajuda a revelar esse
+acoplamento indevido.</p>
+<p>A lista interna de resultados é um <strong>ArrayList</strong>, que
+aceita inclusões durante a montagem. No retorno,
+<strong>List.copyOf(resultados)</strong> fornece uma lista não
+modificável. O chamador não pode acrescentar, remover ou substituir
+elementos nessa resposta.</p>
+<p>Não precisamos prometer que será criada uma nova identidade de objeto
+em toda situação: o compromisso relevante é o conteúdo retornado e sua
+impossibilidade de modificação. A <a
+href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#copyOf(java.util.Collection)">API
+de List.copyOf</a> descreve seu comportamento e as restrições sobre
+elementos nulos.</p>
+<p>A lista não modificável e os resultados sem componentes mutáveis
+expostos formam uma resposta estável. O chamador pode guardar o retorno
+de uma chamada, executar outra conciliação e continuar consultando o
+primeiro resultado sem vê-lo ser reutilizado como área de trabalho.</p>
+<h3 id="cada-chamada-começa-do-próprio-começo">Cada chamada começa do
+próprio começo</h3>
+<p>O conciliador não possui uma lista de resultados como campo, nem um
+mapa estático de referências já encontradas. Todos os dados auxiliares
+são criados dentro dos métodos.</p>
+<p>Assim, uma chamada não herda pagamentos da anterior. Uma chamada
+inválida também não deixa um lote meio pronto armazenado na instância.
+Criar duas chamadas sobre o mesmo objeto deve produzir o mesmo
+comportamento que criar duas instâncias independentes para os mesmos
+dados.</p>
+<p>Isso não autoriza modificar uma lista de entrada em outra thread
+enquanto a conciliação a percorre. Esse cenário de concorrência externa
+não foi contratado. O serviço não cria concorrência interna nem
+implementa um protocolo para capturar uma fotografia de listas que
+estejam sendo alteradas.</p>
+<h2 id="9-explique-a-complexidade-com-precisão">9. Explique a
+complexidade com precisão</h2>
+<p>Considere <strong>n</strong> como a quantidade de esperados e
+<strong>m</strong> como a quantidade de liquidados. Indexar os esperados
+percorre seus <strong>n</strong> elementos. Indexar os liquidados
+percorre seus <strong>m</strong> elementos. Os dois laços de
+classificação voltam a percorrer, respectivamente, até
+<strong>n</strong> e <strong>m</strong> referências.</p>
+<p>A quantidade de resultados é, no máximo, <strong>n + m</strong>.
+Copiar a lista final também tem custo proporcional à quantidade
+produzida. Portanto, existem algumas passagens lineares; não existe uma
+busca completa da segunda lista dentro de cada passo da primeira.</p>
+<p>Considerando operações de mapa com custo médio constante e
+referências de tamanho limitado, o tempo médio é <strong>O(n +
+m)</strong>. Os mapas, os resultados e a cópia final ocupam memória
+adicional <strong>O(n + m)</strong>.</p>
+<p>O termo “médio” importa. Mapas baseados em hash possuem hipóteses de
+distribuição e custos internos; não precisamos prometer tempo constante
+absoluto para qualquer entrada. Duas chaves podem ter o mesmo hash sem
+serem iguais: o mapa também verifica igualdade. Colisão de hash não
+significa referência duplicada.</p>
+<p>O comprimento do texto também custa. <strong>isBlank()</strong>
+examina caracteres; calcular hashes e comparar Strings pode exigir
+trabalho proporcional ao tamanho das referências. A expressão
+<strong>O(n + m)</strong> usa a convenção de tratar esse custo como
+limitado. Se referências gigantes fossem relevantes, a análise
+precisaria contabilizar também os caracteres processados.</p>
+<p>Não use um cronômetro com poucos registros para “provar” essa
+complexidade. O raciocínio vem da estrutura do algoritmo. Medições de
+desempenho podem complementar a análise em um ambiente definido, mas não
+substituem a contagem das passagens e das buscas.</p>
+<h2 id="10-use-tdd-como-um-roteiro-de-construção">10. Use TDD como um
+roteiro de construção</h2>
+<p>TDD organiza o desenvolvimento em ciclos de teste que falha,
+implementação suficiente e melhoria do código. A sequência abaixo é uma
+proposta para você reconstruir a solução. Ela não afirma que os arquivos
+apresentados foram necessariamente produzidos nessa ordem temporal.</p>
+<h3 id="vermelho-torne-a-ausência-de-comportamento-visível">Vermelho:
+torne a ausência de comportamento visível</h3>
+<p>O enunciado fornece testes que utilizam <strong>Conciliador</strong>,
+<strong>Lancamento</strong>, <strong>Resultado</strong> e
+<strong>Status</strong>. Se esses tipos ainda não existem, o primeiro
+vermelho pode ser de compilação. Isso é diferente de um teste executado
+que encontrou uma classificação errada.</p>
+<p>Crie os tipos e a assinatura pública necessários para o projeto
+compilar. Depois escolha uma regra pequena, como duas listas vazias ou
+um pagamento com valores iguais. Escreva a expectativa antes de
+preencher o comportamento correspondente.</p>
+<p>Uma falha útil precisa ter uma razão compreensível. “Não compilou
+porque falta um tipo” orienta uma ação diferente de “esperava
+CONCILIADO, mas recebi VALOR_DIVERGENTE”.</p>
+<h3 id="verde-atenda-à-regra-sem-ampliar-o-problema">Verde: atenda à
+regra sem ampliar o problema</h3>
+<p>Implemente o comportamento necessário e execute novamente. Acrescente
+casos para os quatro estados, para a ordem e para duplicatas com valor
+igual. A cada mudança, observe se uma expectativa já atendida deixou de
+funcionar.</p>
+<p>Não introduza banco, filas ou mocks para fazer o exemplo parecer
+maior. As entradas são valores em memória e a saída pode ser comparada
+diretamente. Mockito não é necessário para testar um cálculo sem
+dependências externas.</p>
+<p>A implementação deve continuar coerente com o contrato completo. Um
+retorno fixo que passa em um exemplo não encerra o trabalho; o próximo
+cenário deve expor a generalização que ainda falta.</p>
+<h3 id="refatorar-melhorar-mantendo-as-promessas">Refatorar: melhorar
+mantendo as promessas</h3>
+<p>Com os testes passando, procure nomes que expliquem intenção e
+trechos com responsabilidades diferentes. Separar
+<strong>validarLancamento</strong>, <strong>indexarEValidar</strong> e
+<strong>classificar</strong> permite ler o fluxo público sem perder o
+detalhe quando ele é necessário.</p>
+<p>Refatorar não é mudar a ordem exigida, normalizar referências ou
+ignorar entradas inválidas. Essas mudanças alterariam comportamento.
+Após uma refatoração, execute novamente a suíte para verificar se o
+contrato observável continua preservado.</p>
+<p>Ao estudar, registre uma hipótese antes de alterar o código: “se eu
+trocar LinkedHashMap por uma estrutura sem ordem de inserção, qual teste
+deve acusar o problema?”. Esse hábito conecta decisão de implementação e
+evidência.</p>
+<h2 id="11-entenda-o-que-os-testes-realmente-verificam">11. Entenda o
+que os testes realmente verificam</h2>
+<p>O arquivo <strong>ConciliadorTest.java</strong> mantém as
+expectativas iniciais do desafio. Ele verifica o lote com as quatro
+classificações e sua ordem, a duplicata com valor igual e a
+impossibilidade de acrescentar um resultado à lista devolvida.</p>
+<p><strong>assertEquals</strong> compara a lista esperada com a lista
+real. Para listas, a sequência dos elementos importa. Para os records
+usados aqui, a igualdade considera os componentes. A combinação permite
+verificar conteúdo e ordem de maneira legível.</p>
+<p><strong>assertThrows</strong> recebe a classe da exceção esperada e
+uma ação. O trecho <code>() -&gt; conciliador.conciliar(...)</code> é
+uma lambda: uma pequena ação que o JUnit executará dentro da
+verificação. Se a chamada não lançar a exceção compatível, o teste
+falha.</p>
+<p>Os testes complementares estão em
+<strong>ConciliadorContratoTest.java</strong>. Eles ampliam a observação
+por grupos:</p>
+<table>
+<thead>
+<tr>
+<th>Grupo</th>
+<th>Erro que procura revelar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Listas vazias e um lado vazio</td>
+<td>Confundir ausência de itens com entrada inválida</td>
+</tr>
+<tr>
+<td>Ordem e referências exclusivas</td>
+<td>Ordenar por chave, repetir resultados ou omitir liquidados</td>
+</tr>
+<tr>
+<td>Valores pequenos, grandes e limites de long</td>
+<td>Comparar objetos, converter para int ou perder precisão</td>
+</tr>
+<tr>
+<td>Nulos, conteúdo em branco e valores não positivos</td>
+<td>Validar somente um lado ou lançar exceção acidental</td>
+</tr>
+<tr>
+<td>Duplicatas e referências exatas</td>
+<td>Sobrescrever repetição, aplicar trim ou ignorar maiúsculas</td>
+</tr>
+<tr>
+<td>Preservação e independência</td>
+<td>Alterar entradas, permitir mudança da saída ou compartilhar
+estado</td>
+</tr>
+</tbody>
+</table>
+<p>Há testes parametrizados que executam uma mesma intenção com
+diferentes argumentos. <strong>ValueSource</strong>,
+<strong>EnumSource</strong> e <strong>MethodSource</strong> fornecem
+esses conjuntos. O número de execuções pode ser maior que o número de
+métodos escritos; consulte o relatório atual em vez de deduzir a
+cobertura contando anotações.</p>
+<p>Um teste com um erro no fim do lote verifica que a chamada inteira
+falha e que uma chamada posterior continua independente. Como a API não
+publica resultados intermediários, não é necessário inventar um
+mecanismo de captura de “meias respostas”. A estrutura do serviço
+explica por que elas não são devolvidas.</p>
+<p>A <a href="https://docs.junit.org/5.11.4/user-guide/">documentação do
+JUnit 5.11.4</a> detalha asserções e testes parametrizados usados pelo
+projeto. O objetivo da suíte é demonstrar promessas do contrato, não
+apenas repetir linha por linha a implementação.</p>
+<h2 id="12-maven-como-o-projeto-é-montado">12. Maven: como o projeto é
+montado</h2>
+<p>O <strong>pom.xml</strong> descreve o projeto para o Maven. Ele
+informa sua identificação, a versão alvo do Java, a dependência de
+testes e os plugins usados nas etapas de compilação, teste e
+empacotamento.</p>
+<h3 id="código-completo-pomxml">Código completo: pom.xml</h3>
+<pre class="xml"><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
+         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;br.com.wesley&lt;/groupId&gt;
+    &lt;artifactId&gt;conciliador-transacoes&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;name&gt;Conciliador de pagamentos&lt;/name&gt;
+    &lt;description&gt;Desafio 03: conciliação de um lote, com Java 17 e JUnit 5.&lt;/description&gt;
+
+    &lt;properties&gt;
+        &lt;maven.compiler.release&gt;17&lt;/maven.compiler.release&gt;
+        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+        &lt;junit.version&gt;5.11.4&lt;/junit.version&gt;
+    &lt;/properties&gt;
+
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
+            &lt;artifactId&gt;junit-jupiter&lt;/artifactId&gt;
+            &lt;version&gt;${junit.version}&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+                &lt;version&gt;3.13.0&lt;/version&gt;
+            &lt;/plugin&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+                &lt;version&gt;3.5.2&lt;/version&gt;
+            &lt;/plugin&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-jar-plugin&lt;/artifactId&gt;
+                &lt;version&gt;3.4.2&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;archive&gt;
+                        &lt;manifest&gt;
+                            &lt;mainClass&gt;br.com.wesley.conciliacao.ExemploConciliacao&lt;/mainClass&gt;
+                        &lt;/manifest&gt;
+                    &lt;/archive&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+&lt;/project&gt;</code></pre>
+<h3 id="cada-linha-uma-intenção-4">Cada linha, uma intenção</h3>
+<table>
+<thead>
+<tr>
+<th>Linha</th>
+<th>Instrução e explicação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</code><br>Declara
+um documento XML 1.0 codificado em UTF-8.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>&lt;project xmlns="<a
+href="http://maven.apache.org/POM/4.0.0&amp;quot;&lt;/code&gt;">http://maven.apache.org/POM/4.0.0&amp;quot;&lt;/code&gt;</a><br>Abre
+o elemento project e informa o namespace do modelo POM usado pelo
+Maven.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>xmlns:xsi="<a
+href="http://www.w3.org/2001/XMLSchema-instance&amp;quot;&lt;/code&gt;">http://www.w3.org/2001/XMLSchema-instance&amp;quot;&lt;/code&gt;</a><br>Declara
+o prefixo xsi, utilizado para indicar a localização do esquema XML.</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>xsi:schemaLocation="<a
+href="http://maven.apache.org/POM/4.0.0">http://maven.apache.org/POM/4.0.0</a>
+<a
+href="https://maven.apache.org/xsd/maven-4.0.0.xsd&amp;quot;&amp;gt;&lt;/code&gt;">https://maven.apache.org/xsd/maven-4.0.0.xsd&amp;quot;&amp;gt;&lt;/code&gt;</a><br>Associa
+o namespace do POM ao esquema oficial que descreve sua estrutura.</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</code><br>Define
+a versão 4.0.0 do modelo POM; não é a versão instalada do executável
+Maven.</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>&lt;groupId&gt;br.com.wesley&lt;/groupId&gt;</code><br>Define
+o groupId, parte da identificação do projeto e de seu artefato.</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>&lt;artifactId&gt;conciliador-transacoes&lt;/artifactId&gt;</code><br>Define
+o artifactId conciliador-transacoes, utilizado no nome padrão do
+JAR.</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>&lt;version&gt;1.0.0&lt;/version&gt;</code><br>Define a versão
+1.0.0 do projeto, também incluída no nome do artefato gerado.</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>&lt;name&gt;Conciliador de
+pagamentos&lt;/name&gt;</code><br>Fornece um nome legível para o
+projeto.</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>&lt;description&gt;Desafio 03: conciliação de um lote, com
+Java 17 e JUnit 5.&lt;/description&gt;</code><br>Descreve o objetivo
+educacional e as tecnologias escolhidas.</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>&lt;properties&gt;</code><br>Abre o bloco de propriedades
+reutilizáveis na configuração.</td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>&lt;maven.compiler.release&gt;17&lt;/maven.compiler.release&gt;</code><br>Define
+Java 17 como release alvo da compilação; não instala nem escolhe sozinho
+o JDK do computador.</td>
+</tr>
+<tr>
+<td>14</td>
+<td><code>&lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</code><br>Define
+UTF-8 para a leitura dos arquivos-fonte durante o build.</td>
+</tr>
+<tr>
+<td>15</td>
+<td><code>&lt;junit.version&gt;5.11.4&lt;/junit.version&gt;</code><br>Centraliza
+em uma propriedade a versão 5.11.4 do JUnit utilizada nos testes.</td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>&lt;/properties&gt;</code><br>Fecha o bloco de
+propriedades.</td>
+</tr>
+<tr>
+<td>18</td>
+<td><code>&lt;dependencies&gt;</code><br>Abre a lista de dependências do
+projeto.</td>
+</tr>
+<tr>
+<td>19</td>
+<td><code>&lt;dependency&gt;</code><br>Inicia a declaração da
+dependência de testes JUnit Jupiter.</td>
+</tr>
+<tr>
+<td>20</td>
+<td><code>&lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;</code><br>Identifica
+o grupo org.junit.jupiter que publica o artefato.</td>
+</tr>
+<tr>
+<td>21</td>
+<td><code>&lt;artifactId&gt;junit-jupiter&lt;/artifactId&gt;</code><br>Seleciona
+o artefato junit-jupiter para o suporte aos testes JUnit 5.</td>
+</tr>
+<tr>
+<td>22</td>
+<td><code>&lt;version&gt;${junit.version}&lt;/version&gt;</code><br>Utiliza
+a propriedade junit.version em vez de repetir o número da versão.</td>
+</tr>
+<tr>
+<td>23</td>
+<td><code>&lt;scope&gt;test&lt;/scope&gt;</code><br>Limita essa
+dependência ao escopo de testes; o conciliador de produção não depende
+do JUnit.</td>
+</tr>
+<tr>
+<td>24</td>
+<td><code>&lt;/dependency&gt;</code><br>Fecha a declaração dessa
+dependência.</td>
+</tr>
+<tr>
+<td>25</td>
+<td><code>&lt;/dependencies&gt;</code><br>Fecha a lista de
+dependências.</td>
+</tr>
+<tr>
+<td>27</td>
+<td><code>&lt;build&gt;</code><br>Abre as configurações do processo de
+build.</td>
+</tr>
+<tr>
+<td>28</td>
+<td><code>&lt;plugins&gt;</code><br>Abre a lista de plugins utilizados
+nas etapas de construção.</td>
+</tr>
+<tr>
+<td>29</td>
+<td><code>&lt;plugin&gt;</code><br>Inicia a configuração do plugin de
+compilação.</td>
+</tr>
+<tr>
+<td>30</td>
+<td><code>&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</code><br>Identifica
+o grupo oficial dos plugins Maven.</td>
+</tr>
+<tr>
+<td>31</td>
+<td><code>&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</code><br>Seleciona
+o Maven Compiler Plugin, responsável pela compilação Java.</td>
+</tr>
+<tr>
+<td>32</td>
+<td><code>&lt;version&gt;3.13.0&lt;/version&gt;</code><br>Fixa a versão
+3.13.0 do plugin de compilação.</td>
+</tr>
+<tr>
+<td>33</td>
+<td><code>&lt;/plugin&gt;</code><br>Fecha a configuração do Compiler
+Plugin.</td>
+</tr>
+<tr>
+<td>34</td>
+<td><code>&lt;plugin&gt;</code><br>Inicia a configuração do plugin que
+executa testes.</td>
+</tr>
+<tr>
+<td>35</td>
+<td><code>&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</code><br>Informa
+novamente o grupo dos plugins oficiais Maven.</td>
+</tr>
+<tr>
+<td>36</td>
+<td><code>&lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;</code><br>Seleciona
+o Maven Surefire Plugin, usado para executar a suíte na fase de
+testes.</td>
+</tr>
+<tr>
+<td>37</td>
+<td><code>&lt;version&gt;3.5.2&lt;/version&gt;</code><br>Fixa a versão
+3.5.2 do Surefire.</td>
+</tr>
+<tr>
+<td>38</td>
+<td><code>&lt;/plugin&gt;</code><br>Fecha a configuração do plugin de
+testes.</td>
+</tr>
+<tr>
+<td>39</td>
+<td><code>&lt;plugin&gt;</code><br>Inicia a configuração do plugin
+responsável pelo JAR.</td>
+</tr>
+<tr>
+<td>40</td>
+<td><code>&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</code><br>Identifica
+o grupo oficial que publica o Jar Plugin.</td>
+</tr>
+<tr>
+<td>41</td>
+<td><code>&lt;artifactId&gt;maven-jar-plugin&lt;/artifactId&gt;</code><br>Seleciona
+o Maven Jar Plugin para empacotar as classes de produção.</td>
+</tr>
+<tr>
+<td>42</td>
+<td><code>&lt;version&gt;3.4.2&lt;/version&gt;</code><br>Fixa a versão
+3.4.2 desse plugin.</td>
+</tr>
+<tr>
+<td>43</td>
+<td><code>&lt;configuration&gt;</code><br>Abre a configuração específica
+do empacotamento.</td>
+</tr>
+<tr>
+<td>44</td>
+<td><code>&lt;archive&gt;</code><br>Abre as opções do arquivo
+empacotado, incluindo seu manifesto.</td>
+</tr>
+<tr>
+<td>45</td>
+<td><code>&lt;manifest&gt;</code><br>Abre a configuração dos campos do
+manifesto do JAR.</td>
+</tr>
+<tr>
+<td>46</td>
+<td><code>&lt;mainClass&gt;br.com.wesley.conciliacao.ExemploConciliacao&lt;/mainClass&gt;</code><br>Indica
+o nome completo da classe com main, permitindo executar o exemplo com
+java -jar.</td>
+</tr>
+<tr>
+<td>47</td>
+<td><code>&lt;/manifest&gt;</code><br>Fecha a configuração do
+manifesto.</td>
+</tr>
+<tr>
+<td>48</td>
+<td><code>&lt;/archive&gt;</code><br>Fecha as opções do arquivo
+empacotado.</td>
+</tr>
+<tr>
+<td>49</td>
+<td><code>&lt;/configuration&gt;</code><br>Fecha a configuração
+específica do Jar Plugin.</td>
+</tr>
+<tr>
+<td>50</td>
+<td><code>&lt;/plugin&gt;</code><br>Fecha a declaração do plugin de
+empacotamento.</td>
+</tr>
+<tr>
+<td>51</td>
+<td><code>&lt;/plugins&gt;</code><br>Fecha a lista de plugins.</td>
+</tr>
+<tr>
+<td>52</td>
+<td><code>&lt;/build&gt;</code><br>Fecha o bloco de build.</td>
+</tr>
+<tr>
+<td>53</td>
+<td><code>&lt;/project&gt;</code><br>Fecha o documento de configuração
+do projeto Maven.</td>
+</tr>
+</tbody>
+</table>
+<p>A propriedade <strong>maven.compiler.release</strong> está definida
+como <strong>17</strong>. Ela orienta o compilador a utilizar o conjunto
+de linguagem, formato de classe e APIs correspondente à versão alvo.
+Isso não instala um JDK no computador. O Maven ainda precisa ser
+executado com uma instalação adequada, conforme a <a
+href="https://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-release.html">documentação
+do Compiler Plugin</a>.</p>
+<p>JUnit aparece com escopo <strong>test</strong>. O programa de
+produção não precisa dessa biblioteca para comparar pagamentos. O
+Surefire executa os testes durante o build; o Jar Plugin registra no
+manifesto a classe que contém o ponto de entrada do exemplo.</p>
+<p>O Maven Wrapper está no repositório para executar a versão de Maven
+configurada pelo projeto. Ele não é o Java e não substitui a instalação
+do JDK. Na primeira execução, pode precisar baixar o Maven e as
+dependências, portanto é necessário acesso aos repositórios
+correspondentes. Consulte o <a
+href="https://maven.apache.org/wrapper/">guia oficial do
+Wrapper</a>.</p>
+<p>Execute os comandos na raiz, a pasta que contém
+<strong>pom.xml</strong> e os scripts <strong>mvnw</strong> e
+<strong>mvnw.cmd</strong>.</p>
+<h3 id="macos-e-linux">macOS e Linux</h3>
+<pre class="sh"><code>java -version
+javac -version
+./mvnw -version
+./mvnw clean verify
+java -jar target/conciliador-transacoes-1.0.0.jar</code></pre>
+<h3 id="windows-com-powershell">Windows com PowerShell</h3>
+<pre class="powershell"><code>java -version
+javac -version
+.\mvnw.cmd -version
+.\mvnw.cmd clean verify
+java -jar target/conciliador-transacoes-1.0.0.jar</code></pre>
+<p>No Prompt de Comando do Windows, use <strong>mvnw.cmd clean
+verify</strong> na mesma pasta. Se já houver uma instalação de Maven
+adequada, <strong>mvn clean verify</strong> também pode executar o
+projeto, mas o Wrapper ajuda a manter a versão prevista.</p>
+<p><strong>clean</strong> remove saídas anteriores do build.
+<strong>verify</strong> percorre as fases necessárias, incluindo
+compilação, testes e empacotamento, até a verificação. Se uma etapa
+falhar, a execução deve ser investigada antes de usar um artefato antigo
+como se representasse o código atual. O <a
+href="https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html">ciclo
+de vida do Maven</a> explica essa sequência.</p>
+<p>Após sucesso, o JAR esperado fica em
+<strong>target/conciliador-transacoes-1.0.0.jar</strong>. Os relatórios
+dos testes ficam em <strong>target/surefire-reports</strong>. Leia o
+resumo do build para confirmar o resultado atual; este livro não fixa
+uma quantidade de testes que poderia ficar desatualizada.</p>
+<h2 id="13-o-exemplo-executável-e-a-fronteira-da-aplicação">13. O
+exemplo executável e a fronteira da aplicação</h2>
+<p>O serviço de domínio não deve imprimir resultados. Para demonstrá-lo
+no terminal, o projeto possui uma classe separada que cria as entradas,
+chama a conciliação e mostra o retorno.</p>
+<h3 id="código-completo-exemploconciliacaojava">Código completo:
+ExemploConciliacao.java</h3>
+<pre class="java"><code>package br.com.wesley.conciliacao;
+
+import java.util.List;
+
+public final class ExemploConciliacao {
+    public static void main(String[] args) {
+        List&lt;Lancamento&gt; esperados = List.of(
+                new Lancamento(&quot;pag-2&quot;, 2_000L),
+                new Lancamento(&quot;pag-1&quot;, 1_000L),
+                new Lancamento(&quot;pag-3&quot;, 3_000L));
+        List&lt;Lancamento&gt; liquidados = List.of(
+                new Lancamento(&quot;pag-4&quot;, 4_000L),
+                new Lancamento(&quot;pag-1&quot;, 900L),
+                new Lancamento(&quot;pag-2&quot;, 2_000L));
+
+        Conciliador conciliador = new Conciliador();
+        List&lt;Resultado&gt; resultados = conciliador.conciliar(esperados, liquidados);
+        for (Resultado resultado : resultados) {
+            System.out.println(resultado.referencia() + &quot; -&gt; &quot; + resultado.status());
+        }
+    }
+}</code></pre>
+<h3 id="cada-linha-uma-intenção-5">Cada linha, uma intenção</h3>
+<table>
+<thead>
+<tr>
+<th>Linha</th>
+<th>Instrução e explicação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>package br.com.wesley.conciliacao;</code><br>Declara o pacote
+da aplicação de demonstração, permitindo usar os tipos do domínio sem
+imports entre eles.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>import java.util.List;</code><br>Importa List para declarar as
+listas e utilizar a fábrica List.of.</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>public final class ExemploConciliacao {</code><br>Declara a
+classe pública final que adapta a execução local ao serviço de
+domínio.</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>public static void main(String[] args) {</code><br>Define o
+ponto de entrada main; ele é estático, não retorna valor e recebe os
+argumentos da linha de comando.</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>List&lt;Lancamento&gt; esperados = List.of(</code><br>Inicia
+uma lista não modificável de lançamentos esperados usando List.of.</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>new Lancamento("pag-2", 2_000L),</code><br>Adiciona pag-2 com
+2000 centavos; o sublinhado é visual e L identifica um literal
+long.</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>new Lancamento("pag-1", 1_000L),</code><br>Adiciona pag-1 com
+1000 centavos na segunda posição dos esperados.</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>new Lancamento("pag-3", 3_000L));</code><br>Adiciona pag-3 com
+3000 centavos e fecha a construção da primeira lista.</td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>List&lt;Lancamento&gt; liquidados = List.of(</code><br>Inicia
+a lista não modificável de lançamentos informados como liquidados.</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>new Lancamento("pag-4", 4_000L),</code><br>Coloca pag-4
+primeiro no lado liquidado; ele será exclusivo desse lado.</td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>new Lancamento("pag-1", 900L),</code><br>Adiciona pag-1 com
+900 centavos, preparando a divergência em relação aos 1000
+esperados.</td>
+</tr>
+<tr>
+<td>14</td>
+<td><code>new Lancamento("pag-2", 2_000L));</code><br>Adiciona pag-2 com
+2000 centavos e fecha a lista, preparando a correspondência de
+valores.</td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>Conciliador conciliador = new Conciliador();</code><br>Cria
+uma instância do conciliador, que não recebe dependências externas nem
+configuração.</td>
+</tr>
+<tr>
+<td>17</td>
+<td><code>List&lt;Resultado&gt; resultados =
+conciliador.conciliar(esperados, liquidados);</code><br>Chama o serviço
+com as duas listas e guarda a resposta não modificável.</td>
+</tr>
+<tr>
+<td>18</td>
+<td><code>for (Resultado resultado : resultados) {</code><br>Percorre os
+resultados na ordem devolvida pelo contrato.</td>
+</tr>
+<tr>
+<td>19</td>
+<td><code>System.out.println(resultado.referencia() + " -&gt; " +
+resultado.status());</code><br>Imprime referência, separador e status;
+essa saída de terminal pertence ao exemplo, não ao núcleo de
+domínio.</td>
+</tr>
+<tr>
+<td>20</td>
+<td><code>}</code><br>Fecha o laço de impressão.</td>
+</tr>
+<tr>
+<td>21</td>
+<td><code>}</code><br>Fecha o método main.</td>
+</tr>
+<tr>
+<td>22</td>
+<td><code>}</code><br>Fecha a classe de demonstração.</td>
+</tr>
+</tbody>
+</table>
+<p>O método <strong>public static void main(String[] args)</strong> é o
+ponto de entrada. <strong>static</strong> permite invocá-lo sem
+construir antes um objeto dessa classe; <strong>void</strong> informa
+que ele não devolve um valor ao chamador Java. <strong>args</strong>
+representa os argumentos recebidos pela linha de comando, embora o
+exemplo não precise utilizá-los.</p>
+<p>A saída esperada do comando <strong>java -jar</strong> é:</p>
+<pre class="text"><code>pag-2 -&gt; CONCILIADO
+pag-1 -&gt; VALOR_DIVERGENTE
+pag-3 -&gt; NAO_LIQUIDADO
+pag-4 -&gt; NAO_PREVISTO</code></pre>
+<p>A impressão pertence a <strong>ExemploConciliacao</strong>, não a
+<strong>Conciliador</strong>. Essa diferença permite que outro programa
+utilize a mesma regra e decida como apresentar o resultado: tela,
+arquivo ou resposta de uma operação.</p>
+<p>O núcleo é um serviço de domínio puro no sentido adotado pelo
+exercício: recebe dados, aplica regras e retorna uma resposta ou lança
+uma exceção de validação, sem entrada e saída externas. Seus mapas
+locais são detalhes de cálculo. Não há motivo para criar uma interface
+de repositório quando nenhum repositório participa do problema.</p>
+<h3 id="onde-entraria-a-cloud-duas-frases">Onde entraria a cloud? Duas
+frases</h3>
+<p>Um adaptador consumidor de mensagens receberia o lote de uma fila,
+converteria o payload em listas de Lancamento e chamaria
+Conciliador.conciliar. Desserialização, confirmação da mensagem,
+repetição e tratamento do transporte ficariam nesse adaptador, fora do
+conciliador, para preservar as regras de negócio independentes da
+infraestrutura.</p>
+<h2 id="14-resolva-erros-sem-alterar-o-contrato">14. Resolva erros sem
+alterar o contrato</h2>
+<h3 id="o-import-aparece-em-vermelho">O import aparece em vermelho</h3>
+<p>Abra na IDE a pasta que contém <strong>pom.xml</strong>, selecione um
+JDK 17 ou superior e importe ou recarregue o projeto Maven. Abrir apenas
+um arquivo solto pode deixar a IDE sem informação sobre a estrutura e as
+dependências.</p>
+<p>Confira a grafia. O tipo é <strong>java.util.List</strong>;
+<strong>Lancamento</strong> e <strong>Resultado</strong> pertencem a
+<strong>br.com.wesley.conciliacao</strong>. Os testes também declaram
+esse pacote. JUnit utiliza nomes como
+<strong>org.junit.jupiter.api.Test</strong>, fornecidos pela dependência
+de teste.</p>
+<p>Se o terminal compila e somente o editor reclama, verifique a
+configuração da IDE antes de reescrever o algoritmo. Se o terminal
+também falha, comece pela primeira mensagem relevante de compilação,
+pois erros posteriores podem ser consequência dela.</p>
+<h3 id="java-ou-javac-não-foi-encontrado">Java ou javac não foi
+encontrado</h3>
+<p>O projeto precisa de um JDK, que inclui o compilador. Confira a
+instalação e as configurações de <strong>PATH</strong> e
+<strong>JAVA_HOME</strong>. Depois abra um novo terminal e compare
+<strong>java -version</strong>, <strong>javac -version</strong> e a
+versão de Java exibida pelo Wrapper.</p>
+<p>A mensagem <strong>release version 17 not supported</strong>
+normalmente indica que o Maven está usando um compilador antigo.
+Instalar outro JDK sem ajustar o ambiente usado pelo Maven pode deixar o
+problema igual.</p>
+<h3 id="o-wrapper-não-executa-ou-não-baixa-arquivos">O Wrapper não
+executa ou não baixa arquivos</h3>
+<p>No macOS/Linux, se aparecer <strong>Permission denied</strong>,
+confira se está na raiz e execute <strong>chmod +x mvnw</strong>. No
+Windows, utilize o script <strong>mvnw.cmd</strong>, com o prefixo
+*<em>.*</em> no PowerShell.</p>
+<p>Falhas de download podem envolver conexão, proxy ou certificados do
+ambiente. Leia qual endereço e qual etapa falharam. Não contorne o
+problema desativando verificações de segurança nem alterando a regra de
+conciliação: o build ainda está preparando suas ferramentas.</p>
+<h3 id="o-jar-não-foi-encontrado">O JAR não foi encontrado</h3>
+<p>Verifique se <strong>clean verify</strong> terminou com sucesso e se
+está executando o comando a partir da raiz. <strong>Unable to access
+jarfile</strong> pode significar caminho incorreto ou ausência de um
+empacotamento bem-sucedido.</p>
+<p>Uma mensagem sobre ausência de <strong>Main-Class</strong> pede
+conferir o manifesto e o empacotamento do projeto. A configuração
+correspondente está no <strong>pom.xml</strong>; recompilar uma classe
+isolada não necessariamente recria o JAR executável.</p>
+<h3 id="a-exceção-é-diferente-da-esperada">A exceção é diferente da
+esperada</h3>
+<p>Se aparece <strong>NullPointerException</strong> antes de entrar no
+serviço, examine a construção da entrada. <strong>List.of</strong> não
+admite elementos nulos. Se a exceção acontece durante o acesso a uma
+referência, confira se a guarda de nulidade vem antes da chamada do
+método.</p>
+<p>Se aparece <strong>UnsupportedOperationException</strong> ao
+modificar o retorno, a proteção solicitada está funcionando. O teste
+deve esperar essa exceção; não remova <strong>List.copyOf</strong> para
+silenciá-la.</p>
+<p>Se a ordem está errada, investigue a estrutura usada e a sequência
+dos laços. Se duas referências com espaços parecem “injustamente”
+diferentes, releia o contrato: preservá-las exatamente é o comportamento
+correto deste exercício.</p>
+<h2 id="15-exercícios-para-confirmar-o-entendimento">15. Exercícios para
+confirmar o entendimento</h2>
+<p>Tente responder antes de consultar a resolução. Escrever a previsão
+obriga você a distinguir o que imagina que o programa faça do que o
+contrato realmente pede.</p>
+<h3 id="exercício-1--quatro-decisões">Exercício 1 — quatro decisões</h3>
+<p>Esperados: <strong>a = 100</strong>, <strong>b = 200</strong>,
+<strong>c = 300</strong>. Liquidados: <strong>d = 400</strong>,
+<strong>b = 250</strong>, <strong>a = 100</strong>. Todos os valores
+estão em centavos. Qual é a saída, na ordem?</p>
+<p><strong>Resposta:</strong> <strong>a → CONCILIADO</strong>, <strong>b
+→ VALOR_DIVERGENTE</strong>, <strong>c → NAO_LIQUIDADO</strong>,
+<strong>d → NAO_PREVISTO</strong>. A ordem inicial vem dos esperados;
+somente depois acrescentamos o liquidado exclusivo.</p>
+<h3 id="exercício-2--mesmo-pagamento-em-dois-lados">Exercício 2 — mesmo
+pagamento em dois lados</h3>
+<p>Esperados contém uma única entrada <strong>pag-1 = 1000</strong>.
+Liquidados também contém uma única entrada <strong>pag-1 =
+1000</strong>. Isso é duplicidade?</p>
+<p><strong>Resposta:</strong> não. A repetição proibida ocorre dentro da
+mesma lista. Aqui há um pagamento presente uma vez em cada visão, que
+deve produzir um único resultado <strong>CONCILIADO</strong>.</p>
+<h3 id="exercício-3--repetir-não-é-somar">Exercício 3 — repetir não é
+somar</h3>
+<p>Liquidados contém <strong>pag-1 = 500</strong> e <strong>pag-1 =
+500</strong>, enquanto esperados contém <strong>pag-1 = 1000</strong>.
+Podemos somar os liquidados e conciliar?</p>
+<p><strong>Resposta:</strong> não. O lote é inválido por referência
+repetida nos liquidados. Somar transformaria o desafio em outro problema
+e esconderia a repetição que o contrato exige rejeitar.</p>
+<h3 id="exercício-4--espaços-e-letras">Exercício 4 — espaços e
+letras</h3>
+<p>Esperados contém <strong>"pag-1" = 100</strong>. Liquidados contém
+<strong>"PAG-1" = 100</strong> e <strong>" pag-1 " = 100</strong>.
+Quantos resultados aparecem?</p>
+<p><strong>Resposta:</strong> três. O esperado recebe
+<strong>NAO_LIQUIDADO</strong>; as duas referências distintas do
+parceiro recebem <strong>NAO_PREVISTO</strong>, na ordem apresentada.
+Não há trim nem conversão de maiúsculas e minúsculas.</p>
+<h3 id="exercício-5--erro-no-final">Exercício 5 — erro no final</h3>
+<p>Uma lista de liquidados começa com vários itens válidos e termina com
+um lançamento de valor zero. O serviço deve devolver os resultados dos
+itens anteriores?</p>
+<p><strong>Resposta:</strong> não. Ele interrompe a chamada com
+<strong>IllegalArgumentException</strong>. Os dois índices precisam
+estar validados antes de começar a lista de resultados; nenhum retorno
+parcial é disponibilizado.</p>
+<h3 id="exercício-6--o-nulo-apareceu-cedo-demais">Exercício 6 — o nulo
+apareceu cedo demais</h3>
+<p>Um teste escreve <strong>List.of((Lancamento) null)</strong> fora de
+<strong>assertThrows</strong> e falha antes de chamar o conciliador.
+Qual é o problema?</p>
+<p><strong>Resposta:</strong> a fábrica da lista rejeita o elemento
+nulo. Construa uma lista que permita esse elemento e coloque somente a
+chamada ao serviço na ação verificada. Assim o teste observa a
+responsabilidade correta.</p>
+<h3 id="exercício-7--uma-troca-aparentemente-inocente">Exercício 7 — uma
+troca aparentemente inocente</h3>
+<p>Você substitui <strong>LinkedHashMap</strong> por
+<strong>TreeMap</strong> porque ele também permite buscar por chave. O
+que muda?</p>
+<p><strong>Resposta:</strong> o percurso passa a seguir a ordenação das
+chaves. Referências recebidas como <strong>z, a, m</strong> poderiam
+sair como <strong>a, m, z</strong>, contrariando o contrato. Ser um mapa
+não basta para preservar a ordem necessária.</p>
+<h3 id="exercício-8--uma-variável-fora-do-método">Exercício 8 — uma
+variável fora do método</h3>
+<p>Para evitar alocações, você transforma a lista de resultados em um
+campo da classe e a reutiliza a cada chamada. Que risco introduz?</p>
+<p><strong>Resposta:</strong> o objeto passa a carregar estado entre
+chamadas. Dependendo de como esse campo for exposto ou limpo, resultados
+podem acumular, respostas anteriores podem ser afetadas e falhas podem
+deixar resíduos. A solução atual prefere variáveis locais e chamadas
+independentes.</p>
+<h3 id="exercício-9--comparar-long">Exercício 9 — comparar Long</h3>
+<p>Dois objetos <strong>Long</strong> representam 10.000 centavos.
+Comparar suas referências com <strong>==</strong> demonstra
+necessariamente que os valores são iguais?</p>
+<p><strong>Resposta:</strong> não. Identidade de objeto e igualdade
+numérica são perguntas diferentes. No conciliador, a presença é
+verificada antes da conversão para primitivo, e a comparação ocorre
+entre valores <strong>long</strong>.</p>
+<h3 id="exercício-10--mude-uma-hipótese">Exercício 10 — mude uma
+hipótese</h3>
+<p>O negócio agora quer aceitar valores zero, coletar todos os erros e
+normalizar referências. Basta acrescentar três condições?</p>
+<p><strong>Resposta:</strong> primeiro é preciso reformular o contrato.
+Aceitar zero muda a validação; coletar erros exige definir como eles
+serão devolvidos; normalizar chaves pode criar colisões entre
+referências antes distintas. Atualize os exemplos e os testes antes de
+implementar essas novas decisões.</p>
+<h2 id="16-explique-a-solução-com-suas-próprias-palavras">16. Explique a
+solução com suas próprias palavras</h2>
+<p>Você pode apresentar a implementação assim:</p>
+<p>“Valido cada lista e construo um índice por referência com
+LinkedHashMap, preservando a ordem de inserção e rejeitando duplicatas
+no próprio lado. Depois percorro os esperados para comparar os valores
+ou identificar ausência, acrescento os liquidados exclusivos e devolvo
+uma lista não modificável.”</p>
+<p>Para justificar o custo, acrescente: “Cada lista é percorrida um
+número fixo de vezes, com consultas médias por chave; por isso o tempo
+médio e a memória adicional são O(n + m), considerando o tamanho das
+referências limitado.”</p>
+<p>Antes de encerrar, confira se consegue explicar por que uma chave
+presente nos dois lados é válida, por que uma referência em branco é
+diferente de uma referência com espaços ao redor de texto e por que
+<strong>Long</strong> aparece onde pode existir ausência. Essas três
+respostas mostram compreensão do contrato, dos dados e da linguagem.</p>
+<h2 id="referências-para-continuar-estudando">Referências para continuar
+estudando</h2>
+<p>As fontes abaixo documentam os recursos usados. As decisões do
+exercício, como rejeitar duplicatas e não aplicar trim, vêm do
+enunciado.</p>
+<ul>
+<li><a
+href="https://docs.oracle.com/en/java/javase/17/language/records.html">Java
+17 — Records</a></li>
+<li><a
+href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html">Java
+17 — Map e putIfAbsent</a></li>
+<li><a
+href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html">Java
+17 — LinkedHashMap</a></li>
+<li><a
+href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html">Java
+17 — List e fábricas não modificáveis</a></li>
+<li><a
+href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html">Java
+17 — String e isBlank</a></li>
+<li><a
+href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html">Java
+17 — Long</a></li>
+<li><a
+href="https://docs.oracle.com/javase/specs/jls/se17/html/jls-15.html">Java
+17 — Avaliação condicional de expressões</a></li>
+<li><a href="https://docs.junit.org/5.11.4/user-guide/">JUnit 5.11.4 —
+Guia de uso</a></li>
+<li><a href="https://maven.apache.org/wrapper/">Apache Maven —
+Wrapper</a></li>
+<li><a
+href="https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html">Apache
+Maven — Ciclo de vida do build</a></li>
+<li><a
+href="https://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-release.html">Maven
+Compiler Plugin — Configuração de release</a></li>
+</ul>
+<p>As versões do projeto estão fixadas para tornar o exercício
+reproduzível. Elas não representam uma afirmação de que sejam as versões
+mais recentes disponíveis.</p>
+</article></main><script>const t=document.querySelector('#type');t.onclick=()=>{const large=document.body.classList.toggle('large');t.setAttribute('aria-pressed',String(large));t.textContent=large?'Tamanho padrão':'Aumentar texto'};document.querySelector('#print').onclick=()=>window.print();function progress(){const room=document.documentElement.scrollHeight-innerHeight;document.querySelector('#progress').style.width=(room>0?Math.min(100,scrollY/room*100):0)+'%'};addEventListener('scroll',progress,{passive:true});addEventListener('resize',progress);progress();</script></body></html>
